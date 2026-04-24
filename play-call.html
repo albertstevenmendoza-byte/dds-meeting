@@ -1,62 +1,81 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>Play Call – Novus Foods Ops Hub</title>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="novus-styles.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
   <script src="novus-core.js"></script>
-
   <style>
-    :root {
-      --bg:#f4f6fb;--surface:#ffffff;--surface2:#f8fafc;--border:#e2e8f0;--border2:#cbd5e1;
-      --ink:#0f172a;--ink2:#334155;--ink3:#64748b;--ink4:#94a3b8;
-      --blue:#2563eb;--blue-l:#3b82f6;--blue-ll:#dbeafe;--blue-glow:rgba(37,99,235,.12);
-      --green:#059669;--red:#dc2626;--radius:14px;--radius-sm:8px;--nav-h:58px;
-      --ease:cubic-bezier(.4,0,.2,1);--ease-spring:cubic-bezier(.34,1.56,.64,1);
-    }
-    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
-    body{font-family:'DM Sans',sans-serif;font-size:13.5px;background:var(--bg);color:var(--ink);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='.022'/%3E%3C/svg%3E");}
-    .page{max-width:1760px;margin:0 auto;padding:0 20px 60px;}
-    .top-nav{height:var(--nav-h);background:var(--surface);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;padding:0 28px;position:sticky;top:0;z-index:200;box-shadow:0 1px 3px rgba(0,0,0,.06);margin-bottom:24px;}
-    .logo{display:flex;align-items:center;gap:10px;}
-    .logo-icon{width:30px;height:30px;background:linear-gradient(135deg,var(--blue),var(--blue-l));border-radius:8px;display:flex;align-items:center;justify-content:center;}
-    .logo-icon svg{width:16px;height:16px;fill:white;}
-    .logo-text{font-size:1.05rem;font-weight:700;color:var(--ink);letter-spacing:-.02em;}
-    .logo-text span{color:var(--blue);}
-    .nav-tabs{display:flex;gap:2px;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:3px;overflow-x:auto;scrollbar-width:none;}
-    .nav-tabs::-webkit-scrollbar{display:none;}
-    .nav-tab{color:var(--ink3);text-decoration:none;font-weight:500;font-size:.82rem;padding:6px 14px;border-radius:7px;white-space:nowrap;}
-    .nav-tab:hover{background:var(--surface);color:var(--ink2);}
-    .nav-tab.active{background:var(--surface);color:var(--blue);font-weight:600;box-shadow:0 1px 4px rgba(0,0,0,.08);}
-    .playcall-title{text-align:center;font-size:2.4rem;font-weight:800;letter-spacing:-.04em;margin-bottom:30px;margin-top:20px;}
-    .playcall-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(400px,1fr));gap:20px;}
-    .panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;}
-    .panel-header{background:linear-gradient(135deg,var(--blue),var(--blue-l));padding:12px 18px;display:flex;align-items:center;justify-content:space-between;}
-    .panel-title{color:white;font-weight:700;font-size:1.1rem;}
-    .task-input-container{padding:12px 16px;background:var(--surface2);border-bottom:1px solid var(--border);}
-    .task-input{width:100%;padding:12px 14px;border-radius:var(--radius-sm);border:1px solid var(--border2);font-family:inherit;font-size:0.9rem;outline:none;}
-    .task-input:focus{border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-glow);background:white;}
-    .task-list{padding:8px 0;min-height:80px;display:flex;flex-direction:column;}
-    .empty-state{flex:1;display:flex;align-items:center;justify-content:center;padding:20px;text-align:center;color:var(--ink4);font-size:0.85rem;font-style:italic;}
-    .task-item{display:flex;align-items:flex-start;gap:12px;padding:14px 18px;border-bottom:1px solid rgba(0,0,0,.03);transition:all 0.4s var(--ease);}
-    .task-item.removing{opacity:0;transform:translateX(40px);pointer-events:none;}
-    .checkbox{width:24px;height:24px;border-radius:7px;border:2px solid var(--border2);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:white;transition:all 0.15s;}
-    .checkbox:hover{border-color:var(--green);background:rgba(5,150,105,.08);}
-    .checkbox svg{width:14px;height:14px;fill:none;stroke:var(--green);stroke-width:3.5;display:none;}
-    .task-text{font-size:1rem;color:var(--ink2);line-height:1.45;flex:1;font-weight:500;}
-    #sync-status{font-size:0.7rem;font-family:'DM Mono';color:var(--ink4);}
+    .page { padding-top:24px; }
+    .page-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:28px; }
+    .page-title { font-size:2rem; font-weight:800; color:var(--ink); letter-spacing:-.04em; }
+    .sync-meta  { font-size:.72rem; font-family:'DM Mono',monospace; color:var(--ink4); display:flex; align-items:center; gap:10px; }
+
+```
+.playcall-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(380px,1fr)); gap:18px; }
+
+/* Manager panel */
+.manager-panel {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:var(--radius); overflow:hidden;
+  box-shadow:var(--shadow-sm);
+  display:flex; flex-direction:column;
+  transition:box-shadow .2s,border-color .2s;
+}
+.manager-panel:hover { box-shadow:var(--shadow); border-color:var(--green-ll); }
+
+.manager-header {
+  background:linear-gradient(135deg,var(--green-xll),var(--green-ll));
+  border-bottom:1.5px solid #a7f3d0;
+  padding:11px 18px;
+}
+.manager-name { font-weight:800; font-size:.95rem; color:var(--green-d); }
+
+.task-input-wrap { padding:11px 14px; background:var(--surface2); border-bottom:1px solid var(--border); }
+.task-input {
+  width:100%; padding:10px 14px;
+  border:1.5px solid var(--border); border-radius:var(--radius-sm);
+  font-family:inherit; font-size:.88rem; color:var(--ink);
+  background:var(--surface); outline:none;
+  transition:border-color .15s,box-shadow .15s;
+}
+.task-input:focus { border-color:var(--green); box-shadow:0 0 0 3px var(--green-glow); }
+
+.task-list { padding:6px 0; min-height:70px; display:flex; flex-direction:column; }
+.empty-state { flex:1; display:flex; align-items:center; justify-content:center; padding:20px; text-align:center; color:var(--ink4); font-size:.82rem; font-style:italic; }
+
+.task-item {
+  display:flex; align-items:flex-start; gap:12px;
+  padding:12px 16px; border-bottom:1px solid var(--border);
+  transition:all .35s var(--ease); background:var(--surface);
+}
+.task-item:last-child { border-bottom:none; }
+.task-item:hover { background:var(--green-xll); }
+.task-item.removing { opacity:0; transform:translateX(30px); }
+
+.checkbox-btn {
+  width:22px; height:22px; border-radius:6px;
+  border:2px solid var(--border2);
+  cursor:pointer; display:flex; align-items:center; justify-content:center;
+  flex-shrink:0; background:var(--surface);
+  transition:border-color .15s,background .15s;
+}
+.checkbox-btn:hover { border-color:var(--green); background:var(--green-xll); }
+.checkbox-btn svg { width:13px; height:13px; fill:none; stroke:var(--green-d); stroke-width:3; }
+
+.task-text { font-size:.9rem; color:var(--ink2); line-height:1.5; flex:1; font-weight:500; }
+```
+
   </style>
 </head>
 <body>
-
 <div class="top-nav">
-  <div class="logo">
-    <div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M3 3h7v7H3zm0 11h7v7H3zm11-11h7v7h-7zm0 11h7v7h-7z"/></svg></div>
-    <span class="logo-text">Novus <span>Foods</span> Ops</span>
-  </div>
+  <div class="logo"><div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M3 3h7v7H3zm0 11h7v7H3zm11-11h7v7h-7zm0 11h7v7h-7z"/></svg></div><span class="logo-text">Novus <span>Foods</span> Ops</span></div>
   <nav class="nav-tabs">
     <a class="nav-tab" href="dds-announcements.html">DDS Announcements</a>
     <a class="nav-tab" href="dds-dashboard.html">DDS Dashboard</a>
@@ -66,141 +85,95 @@
     <a class="nav-tab active" href="play-call.html">Play Call</a>
     <a class="nav-tab" href="needs-action.html">Needs Action</a>
   </nav>
-  <div style="display:flex;gap:12px;align-items:center;">
-    <span id="sync-status">Connecting...</span>
-    <button style="background:var(--bg);border:1px solid var(--border2);padding:5px 12px;cursor:pointer;border-radius:6px;font-family:inherit;font-size:0.75rem;" onclick="fetchData()">Refresh</button>
-  </div>
+  <button class="btn btn-ghost" style="font-size:.78rem;padding:6px 14px;" onclick="NovusCore.navigateTo('index.html')">Logout</button>
 </div>
 
 <div class="page">
-  <h1 class="playcall-title">Daily Play Call</h1>
+  <div class="page-top">
+    <h1 class="page-title">Daily Play Call</h1>
+    <div class="sync-meta">
+      <span id="sync-status">Connecting…</span>
+      <button class="btn btn-ghost" style="font-size:.72rem;padding:5px 11px;" onclick="fetchData()">↺ Refresh</button>
+    </div>
+  </div>
   <div class="playcall-grid" id="main-grid"></div>
 </div>
 
 <script>
-  const MANAGERS = [
-    { name: 'Production: Hector',        webhook: '' },
-    { name: 'QA: Cristian',              webhook: 'https://default56b8cda7546e49b1ab41957d6fafac.dd.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/3330a334c6e340e9ab750cb4a1b9702b/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=9BdUCDaZe7dhLNatV69lY-ZRPPe8qYvKIFfxJ20oO00' },
-    { name: 'Warehouse: Carl',           webhook: 'https://default56b8cda7546e49b1ab41957d6fafac.dd.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/32e270c28aa74b1bbee4588d4ab2a6e3/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=vItsJFg2BsGJxTkZwA4GOUb4EMemCrpX5l0IGwe-YZs' },
-    { name: 'Maintenance: Mauricio',     webhook: 'https://default56b8cda7546e49b1ab41957d6fafac.dd.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/3ecd57b9d8c74c14a60fa474d3a05117/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=e_NGMAjZLA48_994qgnITGCqx083usTtSr_bjKfzIUs' },
-    { name: 'HR: Vanessa',               webhook: '' },
-    { name: 'Inventory Control: Albert', webhook: 'https://default56b8cda7546e49b1ab41957d6fafac.dd.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/a32d55cc566d4897ad4934189492cea0/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=ehXMfQLr6N94l8tYdGN7zqxSN4Fagu310qRNgTdeNJw' },
+  const MANAGERS=[
+    {name:'Production: Hector',webhook:''},
+    {name:'QA: Cristian',webhook:'https://default56b8cda7546e49b1ab41957d6fafac.dd.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/3330a334c6e340e9ab750cb4a1b9702b/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=9BdUCDaZe7dhLNatV69lY-ZRPPe8qYvKIFfxJ20oO00'},
+    {name:'Warehouse: Carl',webhook:'https://default56b8cda7546e49b1ab41957d6fafac.dd.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/32e270c28aa74b1bbee4588d4ab2a6e3/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=vItsJFg2BsGJxTkZwA4GOUb4EMemCrpX5l0IGwe-YZs'},
+    {name:'Maintenance: Mauricio',webhook:'https://default56b8cda7546e49b1ab41957d6fafac.dd.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/3ecd57b9d8c74c14a60fa474d3a05117/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=e_NGMAjZLA48_994qgnITGCqx083usTtSr_bjKfzIUs'},
+    {name:'HR: Vanessa',webhook:''},
+    {name:'Inventory Control: Albert',webhook:'https://default56b8cda7546e49b1ab41957d6fafac.dd.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/a32d55cc566d4897ad4934189492cea0/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=ehXMfQLr6N94l8tYdGN7zqxSN4Fagu310qRNgTdeNJw'},
   ];
 
-  let taskData = [];
+  let taskData=[];
 
-  // Build the static grid structure once (inputs are preserved between fetches)
-  function initGrid() {
-    document.getElementById('main-grid').innerHTML = MANAGERS.map(mgr => {
-      const safeId = mgr.name.replace(/\s+/g, '');
-      return `
-        <div class="panel">
-          <div class="panel-header"><span class="panel-title">${mgr.name}</span></div>
-          <div class="task-input-container">
-            <input type="text" class="task-input" id="input-${safeId}"
-              placeholder="Assign play..."
-              onkeydown="if(event.key==='Enter') addTask('${mgr.name}', this)">
-          </div>
-          <div class="task-list" id="list-${safeId}">
-            <div class="empty-state">Loading plays...</div>
-          </div>
-        </div>`;
+  function initGrid(){
+    document.getElementById('main-grid').innerHTML=MANAGERS.map(mgr=>{
+      const sid=mgr.name.replace(/\s+/g,'');
+      return`<div class="manager-panel">
+        <div class="manager-header"><div class="manager-name">${mgr.name}</div></div>
+        <div class="task-input-wrap">
+          <input type="text" class="task-input" id="input-${sid}" placeholder="Assign a play…" onkeydown="if(event.key==='Enter')addTask('${mgr.name}',this)">
+        </div>
+        <div class="task-list" id="list-${sid}"><div class="empty-state">Loading plays…</div></div>
+      </div>`;
     }).join('');
   }
 
-  // Update only the task list portion (leaves inputs untouched)
-  function render() {
-    MANAGERS.forEach(mgr => {
-      const safeId = mgr.name.replace(/\s+/g, '');
-      const container = document.getElementById(`list-${safeId}`);
-      if (!container) return;
-      const mgrTasks = taskData.filter(t => t.owner === mgr.name);
-      if (!mgrTasks.length) {
-        container.innerHTML = '<div class="empty-state">No active plays.</div>';
-        return;
-      }
-      container.innerHTML = mgrTasks.map(task => `
+  function render(){
+    MANAGERS.forEach(mgr=>{
+      const sid=mgr.name.replace(/\s+/g,'');
+      const container=document.getElementById(`list-${sid}`);if(!container)return;
+      const mgrTasks=taskData.filter(t=>t.owner===mgr.name);
+      if(!mgrTasks.length){container.innerHTML='<div class="empty-state">No active plays.</div>';return;}
+      container.innerHTML=mgrTasks.map(task=>`
         <div class="task-item" id="task-${task.id}">
-          <div class="checkbox" onclick="completeTask('${task.id}', this)">
-            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-          </div>
+          <button class="checkbox-btn" onclick="completeTask('${task.id}',this)" title="Mark complete">
+            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </button>
           <div class="task-text">${task.text}</div>
         </div>`).join('');
     });
   }
 
-  // ─── CHANGED: fetch from Supabase ─────────────────────────────────────────
-  async function fetchData() {
-    const status = document.getElementById('sync-status');
-    status.textContent = 'Syncing...';
-    const { data, error } = await NovusDB.playCall.getAll();
-    if (error) { status.textContent = 'Error'; console.error(error); return; }
-    taskData = data || [];
-    // Cache for offline resilience
-    try { localStorage.setItem('novus_playcall_cache', JSON.stringify(taskData)); } catch(_) {}
+  async function fetchData(){
+    const status=document.getElementById('sync-status');status.textContent='Syncing…';
+    const{data,error}=await NovusDB.playCall.getAll();
+    if(error){status.textContent='Error';console.error(error);return;}
+    taskData=data||[];
+    try{localStorage.setItem('novus_playcall_cache',JSON.stringify(taskData));}catch(_){}
     render();
-    status.textContent = `Synced ${new Date().toLocaleTimeString()}`;
+    status.textContent=`Synced ${new Date().toLocaleTimeString()}`;
   }
 
-  // ─── CHANGED: add via Supabase ────────────────────────────────────────────
-  async function addTask(managerName, input) {
-    const text = input.value.trim();
-    if (!text) return;
-    const mgr = MANAGERS.find(m => m.name === managerName);
-    const id = Date.now().toString();
-
-    input.value = '';
-
-    // Optimistic update — show immediately
-    taskData.push({ id, owner: managerName, text });
-    render();
-
-    const { error } = await NovusDB.playCall.add({
-      id, owner: managerName, text, webhook: mgr?.webhook || '', date: new Date().toLocaleString(),
-    });
-
-    if (error) {
-      console.error('Add error', error);
-      taskData = taskData.filter(t => t.id !== id); // rollback
-      render();
-    } else if (mgr?.webhook) {
-      // Fire Power Automate webhook (unchanged from original)
-      fetch(mgr.webhook, { method:'POST', mode:'no-cors', body: JSON.stringify({ task: text, owner: managerName }) }).catch(() => {});
-    }
+  async function addTask(managerName,input){
+    const text=input.value.trim();if(!text)return;
+    const mgr=MANAGERS.find(m=>m.name===managerName);
+    const id=Date.now().toString();
+    input.value='';
+    taskData.push({id,owner:managerName,text});render();
+    const{error}=await NovusDB.playCall.add({id,owner:managerName,text,webhook:mgr?.webhook||'',date:new Date().toLocaleString()});
+    if(error){console.error(error);taskData=taskData.filter(t=>t.id!==id);render();}
+    else if(mgr?.webhook)fetch(mgr.webhook,{method:'POST',mode:'no-cors',body:JSON.stringify({task:text,owner:managerName})}).catch(()=>{});
   }
 
-  // ─── CHANGED: delete via Supabase ─────────────────────────────────────────
-  async function completeTask(id, el) {
-    const row = document.getElementById(`task-${id}`);
-    if (row) {
-      el.style.background = 'var(--green)';
-      el.style.borderColor = 'var(--green)';
-      el.querySelector('svg').style.display = 'block';
-      row.classList.add('removing');
-      setTimeout(() => {
-        taskData = taskData.filter(t => t.id !== id);
-        render();
-      }, 400);
-    }
-    const { error } = await NovusDB.playCall.delete(id);
-    if (error) console.error('Delete error', error);
+  async function completeTask(id,btn){
+    const row=document.getElementById(`task-${id}`);
+    if(row){btn.style.background='var(--green-ll)';btn.style.borderColor='var(--green)';row.classList.add('removing');setTimeout(()=>{taskData=taskData.filter(t=>t.id!==id);render();},380);}
+    await NovusDB.playCall.delete(id);
   }
 
-  window.onload = () => {
-    NovusCore.requireAuth();
-    initGrid();
-
-    // Restore from local cache for instant display before first fetch
-    try {
-      const cached = localStorage.getItem('novus_playcall_cache');
-      if (cached) { taskData = JSON.parse(cached); render(); }
-    } catch(_) {}
-
+  window.onload=()=>{
+    NovusCore.requireAuth();initGrid();
+    try{const c=localStorage.getItem('novus_playcall_cache');if(c){taskData=JSON.parse(c);render();}}catch(_){}
     fetchData();
-
-    // Real-time: when anyone adds or completes a play, all screens update
-    NovusDB.playCall.subscribe(() => fetchData());
+    NovusDB.playCall.subscribe(()=>fetchData());
   };
 </script>
+
 </body>
 </html>
