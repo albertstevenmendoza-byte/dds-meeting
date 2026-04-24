@@ -1,68 +1,88 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>DDS Announcements – Novus Foods Ops Hub</title>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-
-  <!-- ① Supabase JS (CDN) — must come before supabase-config.js -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="novus-styles.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <!-- ② Your config + NovusDB wrapper -->
   <script src="supabase-config.js"></script>
-  <!-- ③ Shared auth / nav utilities — unchanged -->
   <script src="novus-core.js"></script>
-
   <style>
-    /* ── Identical to original — zero CSS changes ── */
-    :root { --bg: #f4f7fa; --surface: #ffffff; --border: #e2e8f0; --ink: #1e293b; --blue: #3b82f6; --radius: 24px; }
-    body { font-family: 'DM Sans', sans-serif; background-color: var(--bg); color: var(--ink); margin: 0; }
-    .top-nav { height: 64px; background: white; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; padding: 0 28px; position: sticky; top: 0; z-index: 1000; }
-    .logo { font-weight: 700; font-size: 1.1rem; } .logo span { color: var(--blue); }
-    .nav-tabs { display: flex; gap: 4px; background: #f1f5f9; padding: 4px; border-radius: 12px; }
-    .nav-tab { padding: 6px 16px; border-radius: 8px; text-decoration: none; font-size: 0.85rem; font-weight: 600; color: #64748b; transition: 0.2s; }
-    .nav-tab.active { background: white; color: var(--blue); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-    .page { max-width: 1760px; margin: 0 auto; padding: 40px 20px; }
-    .header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
-    #sync-indicator { font-size: 0.72rem; font-weight: 700; color: var(--blue); opacity: 0; transition: 0.3s; margin-left: 15px; background: #eff6ff; padding: 4px 12px; border-radius: 20px; border: 1px solid #dbeafe; }
-    #sync-indicator.active { opacity: 1; }
-    .btn { padding: 12px 24px; border-radius: 10px; font-weight: 700; cursor: pointer; border: none; transition: 0.2s; font-size: 0.9rem; }
-    .btn-primary { background: var(--blue); color: white; box-shadow: 0 4px 12px rgba(59,130,246,0.2); }
-    .board-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 32px; }
-    .pretty-card { background: white; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: 0 4px 20px -5px rgba(0,0,0,0.05); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1); position: relative; }
-    .pretty-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px -10px rgba(0,0,0,0.08); }
-    .pretty-card.theme-dark { color: white; }
-    .pretty-card.theme-dark .card-footer { background: rgba(0,0,0,0.1); color: rgba(255,255,255,0.7); }
-    .pretty-card.theme-dark .card-body { color: white; }
-    .card-image-wrap { width: 100%; height: 220px; background: #f1f5f9; position: relative; overflow: hidden; }
-    .card-image-wrap img { width: 100%; height: 100%; object-fit: cover; transition: 0.6s; }
-    .admin-toolbar { position: absolute; top: 12px; left: 12px; right: 12px; display: flex; gap: 6px; opacity: 0; transition: 0.3s; z-index: 10; }
-    .pretty-card:hover .admin-toolbar { opacity: 1; }
-    .tool-btn { background: rgba(255,255,255,0.9); backdrop-filter: blur(8px); border: 1px solid rgba(0,0,0,0.05); padding: 6px 10px; border-radius: 8px; font-size: 0.7rem; font-weight: 800; cursor: pointer; color: #475569; transition: 0.2s; }
-    .tool-btn:hover { background: var(--blue); color: white; border-color: var(--blue); }
-    .card-content { padding: 30px; }
-    .badge { background: var(--blue); color: white; padding: 4px 10px; border-radius: 6px; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; margin-bottom: 14px; display: inline-block; letter-spacing: 0.05em; }
-    .card-body { font-size: 1.15rem; min-height: 90px; outline: none; white-space: pre-wrap; margin-bottom: 25px; font-weight: 500; line-height: 1.6; color: #334155; }
-    .card-controls { display: flex; align-items: center; justify-content: space-between; border-top: 1px solid #f1f5f9; padding-top: 18px; }
-    .color-dots { display: flex; gap: 12px; align-items: center; }
-    .dot { width: 24px; height: 24px; border-radius: 50%; cursor: pointer; border: 2.5px solid #cbd5e1; transition: 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-    .dot:hover { transform: scale(1.2); border-color: #94a3b8; }
-    .dot.active { border: 4px solid var(--blue) !important; transform: scale(1.1); box-shadow: 0 0 0 2px white; }
-    .delete-btn { cursor: pointer; color: #cbd5e1; font-size: 1.1rem; transition: 0.2s; }
-    .delete-btn:hover { color: #ef4444; }
-    .card-footer { padding: 14px 30px; font-size: 0.72rem; color: #94a3b8; font-weight: 600; border-top: 1px solid rgba(0,0,0,0.02); }
-    .gallery-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); display: none; place-items: center; z-index: 2000; padding: 20px; }
-    .gallery-overlay.active { display: grid; }
-    .gallery-window { background: white; width: 100%; max-width: 850px; padding: 35px; border-radius: 32px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
-    .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; margin: 24px 0; }
-    .gallery-item { width: 100%; height: 130px; object-fit: cover; border-radius: 16px; cursor: pointer; border: 4px solid transparent; transition: 0.2s; }
-    .gallery-item:hover { border-color: var(--blue); transform: translateY(-3px); }
-    body:not(.is-admin) .admin-only { display: none !important; }
+    .page { padding-top:28px; }
+    .header-flex { display:flex; justify-content:space-between; align-items:center; margin-bottom:36px; }
+    .page-title  { font-size:2rem; font-weight:800; color:var(--ink); letter-spacing:-.03em; }
+    .sync-badge  { font-size:.7rem; font-weight:700; color:var(--green); background:var(--green-xll); padding:3px 12px; border-radius:20px; border:1px solid var(--green-ll); margin-left:12px; opacity:0; transition:.3s; }
+    .sync-badge.on { opacity:1; }
+
+```
+.board-container { display:grid; grid-template-columns:repeat(auto-fill,minmax(390px,1fr)); gap:28px; }
+
+/* Card */
+.pretty-card {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:20px; overflow:hidden;
+  box-shadow:var(--shadow-sm);
+  transition:transform .35s var(--spring),box-shadow .35s;
+  position:relative;
+}
+.pretty-card:hover { transform:translateY(-5px); box-shadow:var(--shadow-lg); }
+.pretty-card.theme-dark { color:white; }
+.pretty-card.theme-dark .card-body  { color:rgba(255,255,255,.92); }
+.pretty-card.theme-dark .card-footer{ background:rgba(0,0,0,.08); color:rgba(255,255,255,.55); }
+
+.card-image-wrap { width:100%; height:210px; background:var(--surface2); overflow:hidden; }
+.card-image-wrap img { width:100%; height:100%; object-fit:cover; transition:.5s; }
+.pretty-card:hover .card-image-wrap img { transform:scale(1.03); }
+
+.admin-toolbar { position:absolute; top:10px; left:10px; right:10px; display:flex; gap:5px; opacity:0; transition:.25s; z-index:10; }
+.pretty-card:hover .admin-toolbar { opacity:1; }
+.tool-btn {
+  background:rgba(255,255,255,.94); backdrop-filter:blur(8px);
+  border:1px solid rgba(0,0,0,.06); padding:5px 10px; border-radius:7px;
+  font-size:.68rem; font-weight:800; cursor:pointer; color:var(--ink2); transition:.15s;
+}
+.tool-btn:hover { background:var(--green); color:white; border-color:var(--green); }
+
+.card-content { padding:26px 28px 20px; }
+.badge { background:var(--green-xll); color:var(--green-d); border:1px solid var(--green-ll); padding:3px 10px; border-radius:6px; font-size:.62rem; font-weight:800; text-transform:uppercase; margin-bottom:12px; display:inline-block; letter-spacing:.05em; }
+.card-body { font-size:1.05rem; min-height:80px; outline:none; white-space:pre-wrap; margin-bottom:20px; font-weight:500; line-height:1.65; color:var(--ink2); }
+.card-controls { display:flex; align-items:center; justify-content:space-between; border-top:1px solid var(--border); padding-top:16px; }
+.color-dots { display:flex; gap:10px; align-items:center; }
+.dot { width:22px; height:22px; border-radius:50%; cursor:pointer; border:2px solid var(--border2); transition:.18s; box-shadow:var(--shadow-xs); }
+.dot:hover { transform:scale(1.25); }
+.dot.active { border:3.5px solid var(--green) !important; transform:scale(1.12); box-shadow:0 0 0 2px white; }
+.delete-btn { cursor:pointer; color:var(--border2); font-size:1rem; transition:.18s; }
+.delete-btn:hover { color:var(--red-l); }
+.card-footer { padding:11px 28px; font-size:.7rem; color:var(--ink4); font-weight:600; border-top:1px solid var(--border); }
+
+/* Skeleton */
+.skeleton-card { height:380px; border-radius:20px; }
+
+/* Gallery modal */
+.gallery-overlay { position:fixed; inset:0; background:rgba(0,0,0,.45); backdrop-filter:blur(10px); display:none; place-items:center; z-index:2000; padding:20px; }
+.gallery-overlay.active { display:grid; }
+.gallery-window { background:var(--surface); width:100%; max-width:820px; padding:32px; border-radius:24px; box-shadow:var(--shadow-lg); }
+.gallery-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:22px; }
+.gallery-header h2 { font-size:1.25rem; font-weight:800; color:var(--ink); }
+.gallery-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(170px,1fr)); gap:14px; }
+.gallery-item { width:100%; height:120px; object-fit:cover; border-radius:14px; cursor:pointer; border:3px solid transparent; transition:.18s; }
+.gallery-item:hover { border-color:var(--green); transform:translateY(-3px); box-shadow:var(--shadow); }
+
+body:not(.is-admin) .admin-only { display:none !important; }
+```
+
   </style>
 </head>
 <body id="main-body">
 
 <div class="top-nav">
-  <div class="logo">Novus <span>Foods</span> Ops</div>
+  <div class="logo">
+    <div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M3 3h7v7H3zm0 11h7v7H3zm11-11h7v7h-7zm0 11h7v7h-7z"/></svg></div>
+    <span class="logo-text">Novus <span>Foods</span> Ops</span>
+  </div>
   <nav class="nav-tabs">
     <a class="nav-tab active" href="dds-announcements.html">DDS Announcements</a>
     <a class="nav-tab" href="dds-dashboard.html">DDS Dashboard</a>
@@ -72,28 +92,32 @@
     <a class="nav-tab" href="play-call.html">Play Call</a>
     <a class="nav-tab" href="needs-action.html">Needs Action</a>
   </nav>
-  <button class="btn" style="background:#f1f5f9; font-size:0.8rem; padding:8px 16px;" onclick="NovusCore.navigateTo('index.html')">Logout</button>
+  <button class="btn btn-ghost" style="font-size:.78rem;padding:6px 14px;" onclick="NovusCore.navigateTo('index.html')">Logout</button>
 </div>
 
 <div class="page">
   <div class="header-flex">
-    <div style="display:flex; align-items:center;">
-      <h2 style="font-size:2.2rem; font-weight:800; letter-spacing: -0.02em;">DDS Announcements</h2>
-      <span id="sync-indicator">Syncing...</span>
+    <div style="display:flex;align-items:center;">
+      <h2 class="page-title">DDS Announcements</h2>
+      <span class="sync-badge" id="sync-badge">Syncing…</span>
     </div>
     <button class="btn btn-primary admin-only" onclick="addItem()">+ Post New Update</button>
   </div>
-  <div class="board-container" id="board">Loading...</div>
+  <div class="board-container" id="board">
+    <div class="skeleton skeleton-card"></div>
+    <div class="skeleton skeleton-card"></div>
+    <div class="skeleton skeleton-card"></div>
+  </div>
 </div>
 
 <div class="gallery-overlay" id="galleryOverlay">
   <div class="gallery-window">
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-      <h2 style="font-weight:800; margin:0; font-size:1.4rem;">Select Cover Image</h2>
-      <button class="btn" style="background:#f1f5f9; padding:8px 16px;" onclick="closeGallery()">Close</button>
+    <div class="gallery-header">
+      <h2>Select Cover Image</h2>
+      <button class="btn btn-ghost" onclick="closeGallery()">Close</button>
     </div>
     <div class="gallery-grid" id="galleryGrid"></div>
-    <div style="text-align:center; border-top:1px solid #eee; padding-top:20px;">
+    <div style="text-align:center;border-top:1px solid var(--border);padding-top:18px;margin-top:8px;">
       <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">Upload Custom Image</button>
       <input type="file" id="fileInput" style="display:none" accept="image/*" onchange="handleFileUpload(event)">
     </div>
@@ -101,170 +125,94 @@
 </div>
 
 <script>
-  // ─── Identical constants ──────────────────────────────────────────────────
-  const PROF_PRESETS = [
+  const PROF_PRESETS=[
     'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=80',
     'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80',
     'https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&fit=crop&w=800&q=80',
     'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=80',
     'https://images.unsplash.com/photo-1565061828021-dd353ba0a1b7?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=800&q=80'
+    'https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=800&q=80',
   ];
-  const THEME_COLORS = ['#ffffff','#e0f2fe','#dcfce7','#fef3c7','#fee2e2','#f3e8ff','#ccfbf1','#fce7f3'];
+  const THEME_COLORS=['#ffffff','#e0f2fe','#dcfce7','#fef3c7','#fee2e2','#f3e8ff','#ccfbf1','#fce7f3'];
 
-  // ─── Auth — identical to original ────────────────────────────────────────
-  function checkAdmin() {
-    try { const u = JSON.parse(sessionStorage.getItem('novus1730_user')); return u && u.role === 'admin'; }
-    catch(e) { return false; }
-  }
-  const isAdmin = checkAdmin();
-  if (isAdmin) document.getElementById('main-body').classList.add('is-admin');
+  function checkAdmin(){try{const u=JSON.parse(sessionStorage.getItem('novus1730_user'));return u&&u.role==='admin';}catch(e){return false;}}
+  const isAdmin=checkAdmin();
+  if(isAdmin)document.getElementById('main-body').classList.add('is-admin');
 
-  function showSync() { document.getElementById('sync-indicator').classList.add('active'); }
-  function hideSync() { setTimeout(() => document.getElementById('sync-indicator').classList.remove('active'), 800); }
+  function showSync(){document.getElementById('sync-badge').classList.add('on');}
+  function hideSync(){setTimeout(()=>document.getElementById('sync-badge').classList.remove('on'),900);}
+  function parseStyle(s){const p=(s||'').split('|');return{bg:p[0]||'#ffffff',align:p[1]||'left',theme:p[2]||'light'};}
 
-  function parseStyle(styleStr) {
-    const parts = (styleStr || '').split('|');
-    return { bg: parts[0] || '#ffffff', align: parts[1] || 'left', theme: parts[2] || 'light' };
-  }
-
-  // ─── CHANGED: load from Supabase instead of GAS ──────────────────────────
-  async function loadData() {
-    const { data, error } = await NovusDB.announcements.getAll();
-    if (error) { console.error('Load error', error); return; }
-
-    const container = document.getElementById('board');
-    if (!data.length) { container.innerHTML = '<p style="color:#94a3b8;">No announcements yet.</p>'; return; }
-
-    container.innerHTML = data.map(item => {
-      const style = parseStyle(item.color);
-      return `
-      <div class="pretty-card theme-${style.theme}" id="card-${item.id}" style="background-color:${style.bg}" data-raw-style="${item.color}">
+  async function loadData(){
+    const{data,error}=await NovusDB.announcements.getAll();
+    if(error){console.error(error);return;}
+    const container=document.getElementById('board');
+    if(!data.length){container.innerHTML='<p style="color:var(--ink4);padding:20px;">No announcements yet.</p>';return;}
+    container.innerHTML=data.map(item=>{
+      const style=parseStyle(item.color);
+      return`<div class="pretty-card theme-${style.theme}" id="card-${item.id}" style="background-color:${style.bg}" data-raw-style="${item.color}">
         <div class="admin-toolbar admin-only">
           <button class="tool-btn" onclick="openGallery('${item.id}')">🖼️ Image</button>
           <button class="tool-btn" onclick="updateStyle('${item.id}','align','left')">Left</button>
           <button class="tool-btn" onclick="updateStyle('${item.id}','align','center')">Center</button>
           <button class="tool-btn" onclick="updateStyle('${item.id}','theme','${style.theme==='light'?'dark':'light'}')">🌓 Mode</button>
         </div>
-        <div class="card-image-wrap">
-          <img src="${item.image || PROF_PRESETS[0]}" id="img-${item.id}">
-        </div>
+        <div class="card-image-wrap"><img src="${item.image||PROF_PRESETS[0]}" id="img-${item.id}" alt="cover"></div>
         <div class="card-content">
           <span class="badge">Announcement ${item.number}</span>
-          <div class="card-body"
-               id="body-${item.id}"
-               style="text-align:${style.align}"
-               contenteditable="${isAdmin}"
-               onblur="updateField('${item.id}','text',this.innerText.trim())">${item.text}</div>
+          <div class="card-body" id="body-${item.id}" style="text-align:${style.align}" contenteditable="${isAdmin}" onblur="updateField('${item.id}','text',this.innerText.trim())">${item.text}</div>
           <div class="card-controls">
             <div class="color-dots admin-only">
-              ${THEME_COLORS.map(c => {
-                const active = style.bg.toLowerCase() === c.toLowerCase();
-                return `<div class="dot ${active?'active':''}" style="background:${c}" data-color="${c}" onclick="updateStyle('${item.id}','bg','${c}')"></div>`;
-              }).join('')}
+              ${THEME_COLORS.map(c=>`<div class="dot${style.bg.toLowerCase()===c.toLowerCase()?' active':''}" style="background:${c}" data-color="${c}" onclick="updateStyle('${item.id}','bg','${c}')"></div>`).join('')}
             </div>
-            ${isAdmin ? `<span class="delete-btn" onclick="deleteItem('${item.id}')">🗑️</span>` : ''}
+            ${isAdmin?`<span class="delete-btn" onclick="deleteItem('${item.id}')">🗑️</span>`:''}
           </div>
         </div>
-        <div class="card-footer"><span>${item.date}</span></div>
+        <div class="card-footer">${item.date}</div>
       </div>`;
     }).join('');
   }
 
-  // ─── CHANGED: update via Supabase ────────────────────────────────────────
-  async function updateField(id, field, value) {
-    if (!isAdmin) return;
-    showSync();
-    const { error } = await NovusDB.announcements.updateField(id, field, value);
-    if (error) console.error('Update error', error);
+  async function updateField(id,field,value){
+    if(!isAdmin)return; showSync();
+    await NovusDB.announcements.updateField(id,field,value);
     hideSync();
   }
-
-  async function updateStyle(id, prop, val) {
-    if (!isAdmin) return;
-    const card = document.getElementById(`card-${id}`);
-    const body = document.getElementById(`body-${id}`);
-    const style = parseStyle(card.getAttribute('data-raw-style'));
-    style[prop] = val;
-
-    // Optimistic DOM update (identical to original)
-    if (prop === 'bg') {
-      card.style.backgroundColor = val;
-      card.querySelectorAll('.dot').forEach(d => {
-        d.classList.toggle('active', d.getAttribute('data-color') === val);
-      });
-    }
-    if (prop === 'align') body.style.textAlign = val;
-    if (prop === 'theme') { card.classList.remove('theme-light','theme-dark'); card.classList.add(`theme-${val}`); }
-
-    const newStyleStr = `${style.bg}|${style.align}|${style.theme}`;
-    card.setAttribute('data-raw-style', newStyleStr);
-    await updateField(id, 'color', newStyleStr);
+  async function updateStyle(id,prop,val){
+    if(!isAdmin)return;
+    const card=document.getElementById(`card-${id}`),body=document.getElementById(`body-${id}`);
+    const style=parseStyle(card.getAttribute('data-raw-style'));
+    style[prop]=val;
+    if(prop==='bg'){card.style.backgroundColor=val;card.querySelectorAll('.dot').forEach(d=>d.classList.toggle('active',d.getAttribute('data-color')===val));}
+    if(prop==='align')body.style.textAlign=val;
+    if(prop==='theme'){card.classList.remove('theme-light','theme-dark');card.classList.add(`theme-${val}`);}
+    const newStr=`${style.bg}|${style.align}|${style.theme}`;
+    card.setAttribute('data-raw-style',newStr);
+    await updateField(id,'color',newStr);
   }
-
-  // ─── CHANGED: add via Supabase ────────────────────────────────────────────
-  async function addItem() {
-    if (!isAdmin) return;
-    showSync();
-    const newItem = {
-      id:     Date.now().toString(),
-      number: document.querySelectorAll('.pretty-card').length + 1,
-      text:   'New update — click to edit this message...',
-      date:   new Date().toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }),
-      image:  PROF_PRESETS[0],
-      color:  '#ffffff|left|light',
-    };
-    const { error } = await NovusDB.announcements.add(newItem);
-    if (error) console.error('Add error', error);
-    // Real-time subscription will trigger loadData() automatically
+  async function addItem(){
+    if(!isAdmin)return; showSync();
+    const newItem={id:Date.now().toString(),number:document.querySelectorAll('.pretty-card').length+1,text:'New update — click to edit this message…',date:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}),image:PROF_PRESETS[0],color:'#ffffff|left|light'};
+    await NovusDB.announcements.add(newItem);
     hideSync();
   }
-
-  // ─── CHANGED: delete via Supabase ─────────────────────────────────────────
-  async function deleteItem(id) {
-    if (!confirm('Delete globally?')) return;
-    showSync();
-    const { error } = await NovusDB.announcements.delete(id);
-    if (error) console.error('Delete error', error);
+  async function deleteItem(id){
+    if(!confirm('Delete globally?'))return; showSync();
+    await NovusDB.announcements.delete(id);
     hideSync();
-    // Real-time subscription will trigger loadData() automatically
   }
+  let activeCardId=null;
+  function openGallery(id){activeCardId=id;document.getElementById('galleryGrid').innerHTML=PROF_PRESETS.map(url=>`<img src="${url}" class="gallery-item" onclick="selectPreset('${url}')" alt="preset">`).join('');document.getElementById('galleryOverlay').classList.add('active');}
+  function closeGallery(){document.getElementById('galleryOverlay').classList.remove('active');}
+  async function selectPreset(url){document.getElementById(`img-${activeCardId}`).src=url;await updateField(activeCardId,'image',url);closeGallery();}
+  function handleFileUpload(e){const file=e.target.files[0];const reader=new FileReader();reader.onload=async ev=>{document.getElementById(`img-${activeCardId}`).src=ev.target.result;await updateField(activeCardId,'image',ev.target.result);closeGallery();};reader.readAsDataURL(file);}
 
-  // ─── Gallery — identical to original ─────────────────────────────────────
-  let activeCardId = null;
-  function openGallery(id) {
-    activeCardId = id;
-    document.getElementById('galleryGrid').innerHTML = PROF_PRESETS.map(
-      url => `<img src="${url}" class="gallery-item" onclick="selectPreset('${url}')">`
-    ).join('');
-    document.getElementById('galleryOverlay').classList.add('active');
-  }
-  function closeGallery() { document.getElementById('galleryOverlay').classList.remove('active'); }
-  async function selectPreset(url) {
-    document.getElementById(`img-${activeCardId}`).src = url;
-    await updateField(activeCardId, 'image', url);
-    closeGallery();
-  }
-  function handleFileUpload(e) {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.onload = async (ev) => {
-      document.getElementById(`img-${activeCardId}`).src = ev.target.result;
-      await updateField(activeCardId, 'image', ev.target.result);
-      closeGallery();
-    };
-    reader.readAsDataURL(file);
-  }
-
-  // ─── CHANGED: real-time subscription replaces the ?t=Date.now() hack ─────
-  // Any change made by any user (admin post, edit, delete) instantly
-  // appears on every other open browser tab — no refresh needed.
-  window.onload = () => {
+  window.onload=()=>{
     NovusCore.requireAuth();
     loadData();
-
-    NovusDB.announcements.subscribe(() => loadData());
+    NovusDB.announcements.subscribe(()=>loadData());
   };
 </script>
+
 </body>
 </html>
