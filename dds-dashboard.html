@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
@@ -22,34 +23,37 @@
     /* ── Dashboard-specific layout ── */
     .dash-grid { display:grid; grid-template-columns:repeat(12,1fr); gap:12px; margin:16px 0; }
 
-    /* Toggle switch (in settings dropdown) */
-    .toggle { width:30px; height:17px; background:var(--border2); border-radius:9px; position:relative; cursor:pointer; border:none; padding:0; transition:background .2s; flex-shrink:0; }
-    .toggle.on { background:var(--green); }
-    .toggle::after { content:''; position:absolute; top:2px; left:2px; width:13px; height:13px; background:white; border-radius:50%; transition:transform .2s; box-shadow:0 1px 3px rgba(0,0,0,.2); }
-    .toggle.on::after { transform:translateX(13px); }
-    .interval-sel { font-family:var(--font); font-size:.72rem; border:1px solid var(--border); border-radius:var(--radius-xs); padding:2px 6px; background:var(--surface2); color:var(--ink2); }
+```
+/* Toggle switch (in settings dropdown) */
+.toggle { width:30px; height:17px; background:var(--border2); border-radius:9px; position:relative; cursor:pointer; border:none; padding:0; transition:background .2s; flex-shrink:0; }
+.toggle.on { background:var(--green); }
+.toggle::after { content:''; position:absolute; top:2px; left:2px; width:13px; height:13px; background:white; border-radius:50%; transition:transform .2s; box-shadow:0 1px 3px rgba(0,0,0,.2); }
+.toggle.on::after { transform:translateX(13px); }
+.interval-sel { font-family:var(--font); font-size:.72rem; border:1px solid var(--border); border-radius:var(--radius-xs); padding:2px 6px; background:var(--surface2); color:var(--ink2); }
 
-    /* Production */
-    .prod-split { display:grid; grid-template-columns:1fr 1.8fr; gap:20px; }
-    .timeframe-block { padding:9px 14px; border-radius:var(--radius-sm); display:flex; flex-direction:column; align-items:center; margin-bottom:12px; }
-    .tf-today { background:linear-gradient(135deg,var(--green-d),var(--green)); color:white; }
-    .tf-yesterday { background:linear-gradient(135deg,var(--ink2),var(--ink)); color:white; }
-    .timeframe-title { font-size:.8rem; font-weight:800; text-transform:uppercase; letter-spacing:.07em; }
-    .timeframe-date  { font-family:var(--mono); font-size:.67rem; opacity:.75; margin-top:2px; }
-    .split-row { display:flex; gap:12px; }
-    .split-col { flex:1; display:flex; flex-direction:column; gap:8px; }
-    .col-label { background:var(--surface2); padding:4px; border-radius:var(--radius-xs); border:1px solid var(--border); text-align:center; font-weight:700; font-size:.64rem; color:var(--ink3); text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px; }
-    .readiness-stack { background:var(--green-xll); border:1px solid var(--green-ll); border-radius:var(--radius-sm); padding:8px; display:flex; flex-direction:column; gap:6px; }
-    .readiness-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-sm); padding:7px; text-align:center; }
-    .readiness-line { font-weight:700; font-size:.73rem; color:var(--green-d); margin-bottom:4px; border-bottom:1px solid var(--border); padding-bottom:3px; }
-    .status-pill { font-size:.62rem; font-weight:700; padding:3px 6px; border-radius:3px; display:flex; justify-content:space-between; align-items:center; margin-top:3px; }
-    .pill-yes { background:rgba(22,163,74,.1); color:#15803d; }
-    .pill-no  { background:rgba(220,38,38,.08); color:var(--red-l); }
-    .pill-label { opacity:.55; font-size:.56rem; }
+/* Production */
+.prod-split { display:grid; grid-template-columns:1fr 1.8fr; gap:20px; }
+.timeframe-block { padding:9px 14px; border-radius:var(--radius-sm); display:flex; flex-direction:column; align-items:center; margin-bottom:12px; }
+.tf-today { background:linear-gradient(135deg,var(--green-d),var(--green)); color:white; }
+.tf-yesterday { background:linear-gradient(135deg,var(--ink2),var(--ink)); color:white; }
+.timeframe-title { font-size:.8rem; font-weight:800; text-transform:uppercase; letter-spacing:.07em; }
+.timeframe-date  { font-family:var(--mono); font-size:.67rem; opacity:.75; margin-top:2px; }
+.split-row { display:flex; gap:12px; }
+.split-col { flex:1; display:flex; flex-direction:column; gap:8px; }
+.col-label { background:var(--surface2); padding:4px; border-radius:var(--radius-xs); border:1px solid var(--border); text-align:center; font-weight:700; font-size:.64rem; color:var(--ink3); text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px; }
+.readiness-stack { background:var(--green-xll); border:1px solid var(--green-ll); border-radius:var(--radius-sm); padding:8px; display:flex; flex-direction:column; gap:6px; }
+.readiness-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-sm); padding:7px; text-align:center; }
+.readiness-line { font-weight:700; font-size:.73rem; color:var(--green-d); margin-bottom:4px; border-bottom:1px solid var(--border); padding-bottom:3px; }
+.status-pill { font-size:.62rem; font-weight:700; padding:3px 6px; border-radius:3px; display:flex; justify-content:space-between; align-items:center; margin-top:3px; }
+.pill-yes { background:rgba(22,163,74,.1); color:#15803d; }
+.pill-no  { background:rgba(220,38,38,.08); color:var(--red-l); }
+.pill-label { opacity:.55; font-size:.56rem; }
 
-    /* Resizer handle */
-    .resizer { position:absolute; right:0; bottom:0; width:18px; height:18px; cursor:nwse-resize; clip-path:polygon(100% 0,100% 100%,0 100%); background:linear-gradient(135deg,var(--border2),var(--green)); opacity:0; transition:opacity .2s; border-radius:0 0 var(--radius) 0; }
-    .panel:hover .resizer { opacity:.4; }
+/* Resizer handle */
+.resizer { position:absolute; right:0; bottom:0; width:18px; height:18px; cursor:nwse-resize; clip-path:polygon(100% 0,100% 100%,0 100%); background:linear-gradient(135deg,var(--border2),var(--green)); opacity:0; transition:opacity .2s; border-radius:0 0 var(--radius) 0; }
+.panel:hover .resizer { opacity:.4; }
+```
+
   </style>
 </head>
 <body>
@@ -57,6 +61,7 @@
 <header class="cmd-header">
 
   <!-- Left: Logo + divider + nav -->
+
   <div class="cmd-left">
     <a href="dds-announcements.html">
       <img src="novus-logo.png" alt="Novus Foods" class="cmd-logo">
@@ -65,89 +70,105 @@
     <nav class="cmd-nav">
       <a class="cmd-tab" href="dds-announcements.html">Announcements</a>
       <a class="cmd-tab active" href="dds-dashboard.html">Dashboard</a>
-      <a class="cmd-tab" href="staff-meeting-dashboard.html">Personal Dashboard</a>
+      <a class="cmd-tab" href="staff-meeting-dashboard.html">Staff Meeting</a>
       <a class="cmd-tab" href="play-call.html">Play Call</a>
-  
+      <a class="cmd-tab" href="needs-action.html">Needs Action</a>
     </nav>
   </div>
 
   <!-- Right: freshness badge + refresh + settings + logout -->
+
   <div class="cmd-right">
-    <div class="freshness-badge" id="freshness-badge" title="Data freshness based on latest workbook date">
-      <div class="freshness-dot" id="freshness-dot"></div>
-      <span id="freshness-text">No data</span>
-    </div>
 
-    <button class="btn-cmd btn-cmd-primary" id="btn-sp" onclick="fetchFromSharePoint()" title="Load live data from SharePoint">
-      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-      Refresh
-    </button>
+```
+<!-- Data freshness badge -->
+<div class="freshness-badge" id="freshness-badge" title="Data freshness">
+  <div class="freshness-dot" id="freshness-dot"></div>
+  <span id="freshness-text">No data</span>
+</div>
 
-    <!-- Settings gear -->
-    <div class="cmd-settings-wrap" id="settings-wrap">
-      <button class="btn-cmd-icon" id="btn-settings" onclick="toggleSettings(event)" title="Settings">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-      </button>
+<!-- Refresh -->
+<button class="btn-cmd btn-cmd-primary" id="btn-sp" onclick="fetchFromSharePoint()" title="Sync latest data from SharePoint">
+  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 0-.08-5.96"/></svg>
+  Sync Data
+</button>
 
-      <div class="settings-dropdown hidden" id="settings-dropdown">
+<!-- ··· More menu (all secondary actions) -->
+<div class="cmd-more-wrap" id="more-wrap">
+  <button class="btn-cmd-icon" id="btn-more" onclick="toggleMore(event)" title="More options">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg>
+  </button>
 
-        <div class="sd-group-label">Data</div>
-        <label class="sd-item" style="cursor:pointer;">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-          Upload XLSX (fallback)
-          <input type="file" id="file-upload" accept=".xlsx,.xls" style="display:none" onchange="handleUpload(event);closeSettings()">
-        </label>
-        <button class="sd-item sd-item-danger" onclick="clearManuals();closeSettings()">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.65"/></svg>
-          Clear Manual Overrides
-        </button>
+  <div class="more-dropdown hidden" id="more-dropdown">
 
-        <div class="sd-divider"></div>
-        <div class="sd-group-label">Auto-refresh</div>
-        <div class="sd-item" style="cursor:default;gap:10px;">
-          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:.82rem;">
-            <button class="toggle" id="auto-toggle" onclick="toggleAutoRefresh()" style="flex-shrink:0;"></button>
-            Enable
-          </label>
-          <select class="interval-sel" id="interval-sel" onchange="updateInterval()" style="width:auto;padding:3px 6px;font-size:.75rem;flex:1;">
-            <option value="5">5 min</option>
-            <option value="10">10 min</option>
-            <option value="15" selected>15 min</option>
-            <option value="30">30 min</option>
-          </select>
-        </div>
-
-        <div class="sd-divider"></div>
-        <div class="sd-group-label">Reference</div>
-        <a class="sd-item" href="dds-rules.html">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-          Rules of Engagement
-        </a>
-        <a class="sd-item" href="dds-corevalues.html">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          Core Values
-        </a>
-
-      </div>
-    </div>
-
-    <button class="btn-cmd btn-cmd-na" onclick="NovusCore.showNeedsAction()" title="Needs Action">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+    <!-- Quick actions -->
+    <div class="sd-group-label">Quick Access</div>
+    <button class="sd-item" onclick="NovusCore.showNeedsAction();closeMore()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
       Needs Action
     </button>
-    <button class="btn-cmd btn-cmd-ghost" onclick="NovusCore.showRules()" title="Rules of Engagement" style="gap:5px;">
+    <button class="sd-item" onclick="NovusCore.showRules();closeMore()">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-      Rules
+      Rules of Engagement
     </button>
-    <button class="btn-cmd btn-cmd-cv" onclick="NovusCore.showCoreValues()" title="Core Values">
+    <button class="sd-item" onclick="NovusCore.showCoreValues();closeMore()">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
       Core Values
     </button>
-    <button class="btn-cmd btn-cmd-ghost" onclick="NovusCore.logout()">Logout</button>
+    <button class="sd-item" onclick="NovusCore.showHelp();closeMore()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      Help & FAQ
+    </button>
+
+    <div class="sd-divider"></div>
+
+    <!-- Data settings -->
+    <div class="sd-group-label">Data</div>
+    <label class="sd-item" style="cursor:pointer;">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      Upload XLSX (fallback)
+      <input type="file" id="file-upload" accept=".xlsx,.xls" style="display:none" onchange="handleUpload(event);closeMore()">
+    </label>
+    <button class="sd-item sd-item-danger" onclick="clearManuals();closeMore()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.65"/></svg>
+      Clear Manual Overrides
+    </button>
+
+    <div class="sd-divider"></div>
+
+    <!-- Auto-refresh -->
+    <div class="sd-group-label">Auto-refresh</div>
+    <div class="sd-item" style="cursor:default;gap:10px;">
+      <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:.82rem;">
+        <button class="toggle" id="auto-toggle" onclick="toggleAutoRefresh()" style="flex-shrink:0;"></button>
+        Enable
+      </label>
+      <select class="interval-sel" id="interval-sel" onchange="updateInterval()" style="width:auto;padding:3px 6px;font-size:.75rem;flex:1;">
+        <option value="5">5 min</option>
+        <option value="10">10 min</option>
+        <option value="15" selected>15 min</option>
+        <option value="30">30 min</option>
+      </select>
+    </div>
+
+    <div class="sd-divider"></div>
+
+    <!-- Session -->
+    <div class="sd-group-label">Session</div>
+    <button class="sd-item sd-item-danger" onclick="NovusCore.logout()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      Logout
+    </button>
+
+  </div>
+</div>
+```
+
   </div>
 </header>
 
 <!-- ══ PLANT STATUS BAR ═══════════════════════════════════════════════════ -->
+
 <div class="plant-status-bar" id="plant-status-bar" data-status="loading">
   <div class="psb-inner">
     <div class="psb-left">
@@ -178,6 +199,7 @@
 </div>
 
 <!-- SharePoint status bar -->
+
 <div class="sp-bar" id="sp-bar">
   <div class="sp-bar-left"><div class="sp-spinner" id="sp-spinner"></div><span id="sp-msg">Ready</span></div>
   <span style="font-size:.7rem;opacity:.85;font-family:var(--mono);" id="sp-time"></span>
@@ -186,177 +208,180 @@
 <div class="page">
   <div class="dash-grid" id="main-sortable">
 
-    <!-- SAFETY -->
-    <div class="panel" style="grid-column:span 4;position:relative;" id="panel-safety">
-      <div class="panel-header ph-safety"><span class="panel-title">🦺 Safety</span></div>
-      <div class="panel-date" id="date-safety">—</div>
-      <div class="panel-body">
-        <div class="metric-row">
-          <div class="metric-box"><div class="metric-label">Days Without Incident</div><div class="metric-value" id="days-incident" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-          <div class="metric-box"><div class="metric-label">Near Misses</div><div class="metric-value" id="near-misses" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-          <div class="metric-box"><div class="metric-label">Safety Audits</div><div class="metric-value" id="safety-audits" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-        </div>
-      </div>
-      <div class="resizer"></div>
+```
+<!-- SAFETY -->
+<div class="panel" style="grid-column:span 4;position:relative;" id="panel-safety">
+  <div class="panel-header ph-safety"><span class="panel-title">🦺 Safety</span></div>
+  <div class="panel-date" id="date-safety">—</div>
+  <div class="panel-body">
+    <div class="metric-row">
+      <div class="metric-box"><div class="metric-label">Days Without Incident</div><div class="metric-value" id="days-incident" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
+      <div class="metric-box"><div class="metric-label">Near Misses</div><div class="metric-value" id="near-misses" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
+      <div class="metric-box"><div class="metric-label">Safety Audits</div><div class="metric-value" id="safety-audits" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
     </div>
+  </div>
+  <div class="resizer"></div>
+</div>
 
-    <!-- QUALITY -->
-    <div class="panel" style="grid-column:span 8;position:relative;" id="panel-quality">
-      <div class="panel-header ph-quality"><span class="panel-title">✅ Quality</span></div>
-      <div class="panel-date" id="date-quality">—</div>
-      <div class="panel-body">
-        <div class="metric-row">
-          <div class="metric-box"><div class="metric-label">Holds</div><div class="metric-value" id="holds" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-          <div class="metric-box"><div class="metric-label">Holds / COA</div><div class="metric-value" id="holds-coa" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-          <div class="metric-box"><div class="metric-label">PEM %</div><div class="metric-value" id="pem" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-          <div class="metric-box"><div class="metric-label">Complaints</div><div class="metric-value" id="complaints" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-        </div>
-      </div>
-      <div class="resizer"></div>
+<!-- QUALITY -->
+<div class="panel" style="grid-column:span 8;position:relative;" id="panel-quality">
+  <div class="panel-header ph-quality"><span class="panel-title">✅ Quality</span></div>
+  <div class="panel-date" id="date-quality">—</div>
+  <div class="panel-body">
+    <div class="metric-row">
+      <div class="metric-box"><div class="metric-label">Holds</div><div class="metric-value" id="holds" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
+      <div class="metric-box"><div class="metric-label">Holds / COA</div><div class="metric-value" id="holds-coa" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
+      <div class="metric-box"><div class="metric-label">PEM %</div><div class="metric-value" id="pem" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
+      <div class="metric-box"><div class="metric-label">Complaints</div><div class="metric-value" id="complaints" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
     </div>
+  </div>
+  <div class="resizer"></div>
+</div>
 
-    <!-- PRODUCTION -->
-    <div class="panel" style="grid-column:span 12;position:relative;" id="panel-production">
-      <div class="panel-header ph-production"><span class="panel-title">⚙️ Production Summary</span></div>
-      <div class="panel-body">
-        <div class="prod-split">
-          <div>
-            <div class="timeframe-block tf-today"><div class="timeframe-title">Today's Operational Status</div><div class="timeframe-date" id="today-date-label">—</div></div>
-            <div class="split-row">
-              <div class="split-col"><div class="col-label">Salsa Lines</div><div class="readiness-stack" id="readiness-salsa"></div></div>
-              <div class="split-col"><div class="col-label">Layer Lines</div><div class="readiness-stack" id="readiness-layer"></div></div>
-            </div>
-          </div>
-          <div>
-            <div class="timeframe-block tf-yesterday"><div class="timeframe-title">Yesterday's Performance</div><div class="timeframe-date" id="yesterday-date-label">—</div></div>
-            <div class="metric-row">
-              <div class="metric-box"><div class="metric-label">Code Red</div><div class="metric-value" id="code-red" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-              <div class="metric-box"><div class="metric-label">Code Yellow</div><div class="metric-value" id="code-yellow" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-              <div style="flex:2"><div class="section-label">Top Downtime Drivers</div><div class="drivers-box alert" id="top-drivers">Scanning data…</div></div>
-            </div>
-            <div class="split-row" style="margin-top:12px;">
-              <div class="split-col"><div class="col-label">Salsa Lines</div><table class="data-table"><thead><tr><th>Line</th><th>OEE</th><th>Attainment</th><th>DT</th></tr></thead><tbody id="tbody-salsa"></tbody></table></div>
-              <div class="split-col"><div class="col-label">Layer Lines</div><table class="data-table"><thead><tr><th>Line</th><th>OEE</th><th>Attainment</th><th>DT</th></tr></thead><tbody id="tbody-layer"></tbody></table></div>
-            </div>
-          </div>
+<!-- PRODUCTION -->
+<div class="panel" style="grid-column:span 12;position:relative;" id="panel-production">
+  <div class="panel-header ph-production"><span class="panel-title">⚙️ Production Summary</span></div>
+  <div class="panel-body">
+    <div class="prod-split">
+      <div>
+        <div class="timeframe-block tf-today"><div class="timeframe-title">Today's Operational Status</div><div class="timeframe-date" id="today-date-label">—</div></div>
+        <div class="split-row">
+          <div class="split-col"><div class="col-label">Salsa Lines</div><div class="readiness-stack" id="readiness-salsa"></div></div>
+          <div class="split-col"><div class="col-label">Layer Lines</div><div class="readiness-stack" id="readiness-layer"></div></div>
         </div>
-        <div class="chart-wrap" style="height:195px;margin-top:12px;"><canvas id="production-chart"></canvas></div>
       </div>
-      <div class="resizer"></div>
+      <div>
+        <div class="timeframe-block tf-yesterday"><div class="timeframe-title">Yesterday's Performance</div><div class="timeframe-date" id="yesterday-date-label">—</div></div>
+        <div class="metric-row">
+          <div class="metric-box"><div class="metric-label">Code Red</div><div class="metric-value" id="code-red" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
+          <div class="metric-box"><div class="metric-label">Code Yellow</div><div class="metric-value" id="code-yellow" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
+          <div style="flex:2"><div class="section-label">Top Downtime Drivers</div><div class="drivers-box alert" id="top-drivers">Scanning data…</div></div>
+        </div>
+        <div class="split-row" style="margin-top:12px;">
+          <div class="split-col"><div class="col-label">Salsa Lines</div><table class="data-table"><thead><tr><th>Line</th><th>OEE</th><th>Attainment</th><th>DT</th></tr></thead><tbody id="tbody-salsa"></tbody></table></div>
+          <div class="split-col"><div class="col-label">Layer Lines</div><table class="data-table"><thead><tr><th>Line</th><th>OEE</th><th>Attainment</th><th>DT</th></tr></thead><tbody id="tbody-layer"></tbody></table></div>
+        </div>
+      </div>
     </div>
+    <div class="chart-wrap" style="height:195px;margin-top:12px;"><canvas id="production-chart"></canvas></div>
+  </div>
+  <div class="resizer"></div>
+</div>
 
-    <!-- SANITATION — after Production -->
-    <div class="panel" style="grid-column:span 4;position:relative;" id="panel-sanitation">
-      <div class="panel-header ph-sanitation"><span class="panel-title">🧼 Sanitation</span></div>
-      <div class="panel-date" id="date-sanitation">—</div>
-      <div class="panel-body">
-        <div class="metric-row">
-          <div class="metric-box"><div class="metric-label">Pre-Op %</div><div class="metric-value" id="san-preop" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-          <div class="metric-box"><div class="metric-label">MSS %</div><div class="metric-value" id="san-mss" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-        </div>
-        <div class="section-label">Sanitation Notes</div>
-        <div class="drivers-box" id="san-notes" contenteditable="true" oninput="saveManual(this.id)" style="min-height:60px;">—</div>
-      </div>
-      <div class="resizer"></div>
+<!-- SANITATION — after Production -->
+<div class="panel" style="grid-column:span 4;position:relative;" id="panel-sanitation">
+  <div class="panel-header ph-sanitation"><span class="panel-title">🧼 Sanitation</span></div>
+  <div class="panel-date" id="date-sanitation">—</div>
+  <div class="panel-body">
+    <div class="metric-row">
+      <div class="metric-box"><div class="metric-label">Pre-Op %</div><div class="metric-value" id="san-preop" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
+      <div class="metric-box"><div class="metric-label">MSS %</div><div class="metric-value" id="san-mss" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
     </div>
+    <div class="section-label">Sanitation Notes</div>
+    <div class="drivers-box" id="san-notes" contenteditable="true" oninput="saveManual(this.id)" style="min-height:60px;">—</div>
+  </div>
+  <div class="resizer"></div>
+</div>
 
-    <!-- COSTS -->
-    <div class="panel" style="grid-column:span 4;position:relative;">
-      <div class="panel-header ph-costs"><span class="panel-title">💰 Costs</span></div>
-      <div class="panel-date" id="date-costs">—</div>
-      <div class="panel-body">
-        <table class="data-table">
-          <thead><tr><th>Metric</th><th>Direct</th><th>Indirect</th></tr></thead>
-          <tbody>
-            <tr><td>Cost / Lb</td><td id="cost-direct" contenteditable="true" oninput="saveManual(this.id)">—</td><td id="cost-indirect" contenteditable="true" oninput="saveManual(this.id)">—</td></tr>
-            <tr><td>Lb / hr</td><td id="pound-hr-direct" contenteditable="true" oninput="saveManual(this.id)">—</td><td id="pound-hr-indirect" contenteditable="true" oninput="saveManual(this.id)">—</td></tr>
-            <tr><td>Proj. Conversion</td><td colspan="2" id="conversion-costs" contenteditable="true" oninput="saveManual(this.id)">—</td></tr>
-            <tr><td>Lbs Produced</td><td colspan="2" id="pounds-prod" contenteditable="true" oninput="saveManual(this.id)">—</td></tr>
-          </tbody>
-        </table>
-        <div><div class="section-label">OT Trend by Dept — Last 30 Days</div><div class="chart-wrap" style="height:185px;"><canvas id="costs-ot-chart"></canvas></div></div>
-      </div>
-      <div class="resizer"></div>
-    </div>
+<!-- COSTS -->
+<div class="panel" style="grid-column:span 4;position:relative;">
+  <div class="panel-header ph-costs"><span class="panel-title">💰 Costs</span></div>
+  <div class="panel-date" id="date-costs">—</div>
+  <div class="panel-body">
+    <table class="data-table">
+      <thead><tr><th>Metric</th><th>Direct</th><th>Indirect</th></tr></thead>
+      <tbody>
+        <tr><td>Cost / Lb</td><td id="cost-direct" contenteditable="true" oninput="saveManual(this.id)">—</td><td id="cost-indirect" contenteditable="true" oninput="saveManual(this.id)">—</td></tr>
+        <tr><td>Lb / hr</td><td id="pound-hr-direct" contenteditable="true" oninput="saveManual(this.id)">—</td><td id="pound-hr-indirect" contenteditable="true" oninput="saveManual(this.id)">—</td></tr>
+        <tr><td>Proj. Conversion</td><td colspan="2" id="conversion-costs" contenteditable="true" oninput="saveManual(this.id)">—</td></tr>
+        <tr><td>Lbs Produced</td><td colspan="2" id="pounds-prod" contenteditable="true" oninput="saveManual(this.id)">—</td></tr>
+      </tbody>
+    </table>
+    <div><div class="section-label">OT Trend by Dept — Last 30 Days</div><div class="chart-wrap" style="height:185px;"><canvas id="costs-ot-chart"></canvas></div></div>
+  </div>
+  <div class="resizer"></div>
+</div>
 
-    <!-- HR -->
-    <div class="panel" style="grid-column:span 4;position:relative;">
-      <div class="panel-header ph-hr"><span class="panel-title">👥 HR | Training</span></div>
-      <div class="panel-date" id="date-hr">—</div>
-      <div class="panel-body">
-        <div class="metric-row">
-          <div class="metric-box"><div class="metric-label">Trainings Complete</div><div class="metric-value" id="trainings" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-          <div class="metric-box"><div class="metric-label">Headcount Total</div><div class="metric-value" id="headcount" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-          <div class="metric-box"><div class="metric-label">Meal Penalties</div><div class="metric-value" id="meal-penalties" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-        </div>
-        <div class="section-label">Trainings Completion</div>
-        <div class="chart-wrap" style="height:155px;"><canvas id="hr-chart"></canvas></div>
-      </div>
-      <div class="resizer"></div>
+<!-- HR -->
+<div class="panel" style="grid-column:span 4;position:relative;">
+  <div class="panel-header ph-hr"><span class="panel-title">👥 HR | Training</span></div>
+  <div class="panel-date" id="date-hr">—</div>
+  <div class="panel-body">
+    <div class="metric-row">
+      <div class="metric-box"><div class="metric-label">Trainings Complete</div><div class="metric-value" id="trainings" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
+      <div class="metric-box"><div class="metric-label">Headcount Total</div><div class="metric-value" id="headcount" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
+      <div class="metric-box"><div class="metric-label">Meal Penalties</div><div class="metric-value" id="meal-penalties" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
     </div>
+    <div class="section-label">Trainings Completion</div>
+    <div class="chart-wrap" style="height:155px;"><canvas id="hr-chart"></canvas></div>
+  </div>
+  <div class="resizer"></div>
+</div>
 
-    <!-- SAP -->
-    <div class="panel" style="grid-column:span 4;position:relative;">
-      <div class="panel-header ph-sap"><span class="panel-title">📊 SAP</span></div>
-      <div class="panel-date" id="date-sap">—</div>
-      <div class="panel-body">
-        <div class="metric-row">
-          <div class="metric-box"><div class="metric-label">Open Process Orders</div><div class="metric-value" id="proc-orders" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-          <div class="metric-box"><div class="metric-label">Warehouse Tasks</div><div class="metric-value" id="warehouse-tasks" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-        </div>
-        <div class="chart-wrap" style="height:115px;"><canvas id="sap-orders-chart"></canvas></div>
-        <div class="chart-wrap" style="height:115px;"><canvas id="sap-teco-chart"></canvas></div>
-        <div class="chart-wrap" style="height:115px;"><canvas id="sap-cogi-chart"></canvas></div>
-      </div>
-      <div class="resizer"></div>
+<!-- SAP -->
+<div class="panel" style="grid-column:span 4;position:relative;">
+  <div class="panel-header ph-sap"><span class="panel-title">📊 SAP</span></div>
+  <div class="panel-date" id="date-sap">—</div>
+  <div class="panel-body">
+    <div class="metric-row">
+      <div class="metric-box"><div class="metric-label">Open Process Orders</div><div class="metric-value" id="proc-orders" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
+      <div class="metric-box"><div class="metric-label">Warehouse Tasks</div><div class="metric-value" id="warehouse-tasks" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
     </div>
+    <div class="chart-wrap" style="height:115px;"><canvas id="sap-orders-chart"></canvas></div>
+    <div class="chart-wrap" style="height:115px;"><canvas id="sap-teco-chart"></canvas></div>
+    <div class="chart-wrap" style="height:115px;"><canvas id="sap-cogi-chart"></canvas></div>
+  </div>
+  <div class="resizer"></div>
+</div>
 
-    <!-- WAREHOUSE -->
-    <div class="panel" style="grid-column:span 4;position:relative;">
-      <div class="panel-header ph-warehouse"><span class="panel-title">🏭 Warehouse</span></div>
-      <div class="panel-date" id="date-warehouse">—</div>
-      <div class="panel-body">
-        <div class="metric-row">
-          <div class="metric-box"><div class="metric-label">Overall Fill Rate %</div><div class="metric-value" id="wh-fill" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-          <div class="metric-box"><div class="metric-label">Walmart Fill Rate %</div><div class="metric-value" id="wh-ce-fill" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-        </div>
-        <div class="metric-row">
-          <div class="metric-box"><div class="metric-label">Cases Scheduled</div><div class="metric-value" id="wh-scheduled" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-          <div class="metric-box"><div class="metric-label">Cases Shipped</div><div class="metric-value" id="wh-shipped" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-        </div>
-        <div class="metric-box" style="background:var(--green-xll);border-color:var(--green-ll);text-align:center;padding:10px;">
-          <div class="metric-label" style="color:var(--green-d);font-weight:800;">CPMH — Cases / Man Hour</div>
-          <div class="metric-value" id="wh-cpmh" style="color:var(--green-d);" contenteditable="true" oninput="saveManual(this.id)">—</div>
-        </div>
-        <div class="chart-wrap" style="height:115px;"><canvas id="wh-fill-chart"></canvas></div>
-        <div class="chart-wrap" style="height:115px;"><canvas id="wh-ce-chart"></canvas></div>
-        <div class="chart-wrap" style="height:195px;"><canvas id="wh-cpmh-chart"></canvas></div>
-      </div>
-      <div class="resizer"></div>
+<!-- WAREHOUSE -->
+<div class="panel" style="grid-column:span 4;position:relative;">
+  <div class="panel-header ph-warehouse"><span class="panel-title">🏭 Warehouse</span></div>
+  <div class="panel-date" id="date-warehouse">—</div>
+  <div class="panel-body">
+    <div class="metric-row">
+      <div class="metric-box"><div class="metric-label">Overall Fill Rate %</div><div class="metric-value" id="wh-fill" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
+      <div class="metric-box"><div class="metric-label">Walmart Fill Rate %</div><div class="metric-value" id="wh-ce-fill" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
     </div>
+    <div class="metric-row">
+      <div class="metric-box"><div class="metric-label">Cases Scheduled</div><div class="metric-value" id="wh-scheduled" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
+      <div class="metric-box"><div class="metric-label">Cases Shipped</div><div class="metric-value" id="wh-shipped" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
+    </div>
+    <div class="metric-box" style="background:var(--green-xll);border-color:var(--green-ll);text-align:center;padding:10px;">
+      <div class="metric-label" style="color:var(--green-d);font-weight:800;">CPMH — Cases / Man Hour</div>
+      <div class="metric-value" id="wh-cpmh" style="color:var(--green-d);" contenteditable="true" oninput="saveManual(this.id)">—</div>
+    </div>
+    <div class="chart-wrap" style="height:115px;"><canvas id="wh-fill-chart"></canvas></div>
+    <div class="chart-wrap" style="height:115px;"><canvas id="wh-ce-chart"></canvas></div>
+    <div class="chart-wrap" style="height:195px;"><canvas id="wh-cpmh-chart"></canvas></div>
+  </div>
+  <div class="resizer"></div>
+</div>
 
-    <!-- INVENTORY -->
-    <div class="panel" style="grid-column:span 4;position:relative;">
-      <div class="panel-header ph-inventory"><span class="panel-title">📦 Inventory Control</span></div>
-      <div class="panel-date" id="date-inventory">—</div>
-      <div class="panel-body">
-        <div class="metric-row">
-          <div class="metric-box"><div class="metric-label">Buena Park Completion</div><div class="metric-value" id="inv-bp" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-          <div class="metric-box"><div class="metric-label">Cerritos Completion</div><div class="metric-value" id="inv-ce" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-        </div>
-        <div class="metric-row">
-          <div class="metric-box"><div class="metric-label">Critical Items</div><div class="metric-value" id="inv-critical" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-          <div class="metric-box"><div class="metric-label">Variants</div><div class="metric-value" id="inv-variants" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-          <div class="metric-box"><div class="metric-label">Bin Accuracy</div><div class="metric-value" id="inv-accuracy" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-        </div>
-        <div><div class="section-label">Inventory Notes</div><div class="drivers-box" id="inv-notes">—</div></div>
-      </div>
-      <div class="resizer"></div>
+<!-- INVENTORY -->
+<div class="panel" style="grid-column:span 4;position:relative;">
+  <div class="panel-header ph-inventory"><span class="panel-title">📦 Inventory Control</span></div>
+  <div class="panel-date" id="date-inventory">—</div>
+  <div class="panel-body">
+    <div class="metric-row">
+      <div class="metric-box"><div class="metric-label">Buena Park Completion</div><div class="metric-value" id="inv-bp" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
+      <div class="metric-box"><div class="metric-label">Cerritos Completion</div><div class="metric-value" id="inv-ce" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
     </div>
+    <div class="metric-row">
+      <div class="metric-box"><div class="metric-label">Critical Items</div><div class="metric-value" id="inv-critical" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
+      <div class="metric-box"><div class="metric-label">Variants</div><div class="metric-value" id="inv-variants" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
+      <div class="metric-box"><div class="metric-label">Bin Accuracy</div><div class="metric-value" id="inv-accuracy" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
+    </div>
+    <div><div class="section-label">Inventory Notes</div><div class="drivers-box" id="inv-notes">—</div></div>
+  </div>
+  <div class="resizer"></div>
+</div>
+```
 
   </div><!-- /dash-grid -->
 
   <!-- Clear Overrides utility -->
+
   <div style="text-align:right;margin-bottom:24px;">
     <button class="btn btn-ghost" onclick="clearManuals()" style="font-size:.75rem;">↺ Clear Manual Overrides</button>
   </div>
@@ -514,24 +539,24 @@ function toggleAutoRefresh(){autoRefreshOn=!autoRefreshOn;document.getElementByI
 function updateInterval(){if(autoRefreshOn){clearTimeout(autoRefreshTimer);scheduleRefresh();}}
 function scheduleRefresh(){const mins=parseInt(document.getElementById('interval-sel').value,10);autoRefreshTimer=setTimeout(()=>{if(autoRefreshOn){fetchFromSharePoint();scheduleRefresh();}},mins*60*1000);}
 
-// ══ SETTINGS DROPDOWN ═══════════════════════════════════════════════════
-function toggleSettings(e){
+// ══ MORE DROPDOWN ════════════════════════════════════════════════════════
+function toggleMore(e){
   e.stopPropagation();
-  const dd=document.getElementById('settings-dropdown');
-  const btn=document.getElementById('btn-settings');
+  const dd=document.getElementById('more-dropdown');
+  const btn=document.getElementById('btn-more');
   const willOpen=dd.classList.contains('hidden');
   dd.classList.toggle('hidden');
   btn.classList.toggle('active',willOpen);
 }
-function closeSettings(){
-  const dd=document.getElementById('settings-dropdown');
-  const btn=document.getElementById('btn-settings');
+function closeMore(){
+  const dd=document.getElementById('more-dropdown');
+  const btn=document.getElementById('btn-more');
   if(dd)dd.classList.add('hidden');
   if(btn)btn.classList.remove('active');
 }
 document.addEventListener('click',e=>{
-  const wrap=document.getElementById('settings-wrap');
-  if(wrap&&!wrap.contains(e.target))closeSettings();
+  const wrap=document.getElementById('more-wrap');
+  if(wrap&&!wrap.contains(e.target))closeMore();
 });
 
 // ══ FRESHNESS BADGE ══════════════════════════════════════════════════════
@@ -741,5 +766,6 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 // ── SharePoint data path ──
 
 </script>
+
 </body>
 </html>
