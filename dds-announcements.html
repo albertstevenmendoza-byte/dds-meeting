@@ -1,218 +1,169 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>DDS Announcements – Novus Foods Ops Hub</title>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Novus Foods 1730 – Ops Hub</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="novus-styles.css">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="supabase-config.js"></script>
   <script src="novus-core.js"></script>
   <style>
-    .page { padding-top:28px; }
-    .header-flex { display:flex; justify-content:space-between; align-items:center; margin-bottom:36px; }
-    .page-title  { font-size:2rem; font-weight:800; color:var(--ink); letter-spacing:-.03em; }
-    .sync-badge  { font-size:.7rem; font-weight:700; color:var(--green); background:var(--green-xll); padding:3px 12px; border-radius:20px; border:1px solid var(--green-ll); margin-left:12px; opacity:0; transition:.3s; }
-    .sync-badge.on { opacity:1; }
+    body { display:flex; min-height:100vh; overflow:hidden; }
 
-```
-.board-container { display:grid; grid-template-columns:repeat(auto-fill,minmax(390px,1fr)); gap:28px; }
+    .brand-panel {
+      width:380px; flex-shrink:0;
+      background:var(--surface); border-right:1px solid var(--border);
+      display:flex; flex-direction:column; justify-content:space-between;
+      padding:44px 36px; position:relative; overflow:hidden;
+    }
+    .brand-panel::before {
+      content:''; position:absolute; top:-60px; right:-60px;
+      width:260px; height:260px;
+      background:radial-gradient(circle,rgba(5,150,105,.1) 0%,transparent 70%);
+      pointer-events:none;
+    }
+    .brand-panel::after {
+      content:''; position:absolute; inset:0;
+      background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);
+      background-size:44px 44px; opacity:.3; pointer-events:none;
+    }
+    .brand-top { position:relative; z-index:1; }
+    .brand-logo { display:flex; align-items:center; gap:14px; margin-bottom:44px; }
+    .brand-logo-icon {
+      width:52px; height:52px;
+      background:linear-gradient(135deg,var(--green-d),var(--green));
+      border-radius:16px; display:flex; align-items:center; justify-content:center;
+      font-size:1.6rem; box-shadow:0 6px 20px rgba(5,150,105,.22);
+    }
+    .brand-logo-name { font-size:1.1rem; font-weight:800; color:var(--ink); letter-spacing:-.02em; }
+    .brand-logo-sub  { font-size:.72rem; color:var(--ink3); font-weight:500; margin-top:2px; }
+    .brand-headline  { font-size:2.2rem; font-weight:800; color:var(--ink); line-height:1.15; letter-spacing:-.04em; margin-bottom:14px; }
+    .brand-headline span { color:var(--green); }
+    .brand-desc { font-size:.83rem; color:var(--ink3); line-height:1.75; max-width:280px; }
+    .plant-stats { display:flex; flex-direction:column; gap:8px; margin-top:36px; position:relative; z-index:1; }
+    .stat-pill {
+      display:flex; align-items:center; gap:12px;
+      background:var(--green-xll); border:1px solid var(--green-ll);
+      border-radius:10px; padding:10px 14px;
+      animation:fadeUp .4s var(--ease) both;
+    }
+    .stat-pill:nth-child(1){animation-delay:.05s}
+    .stat-pill:nth-child(2){animation-delay:.1s}
+    .stat-pill:nth-child(3){animation-delay:.15s}
+    .stat-pill:nth-child(4){animation-delay:.2s}
+    .stat-icon  { font-size:1rem; width:20px; text-align:center; }
+    .stat-label { font-size:.68rem; color:var(--ink3); font-weight:600; text-transform:uppercase; letter-spacing:.04em; }
+    .stat-value { font-size:.78rem; color:var(--green-d); font-weight:700; }
+    .brand-bottom { position:relative; z-index:1; font-size:.65rem; color:var(--ink4); font-family:'DM Mono',monospace; letter-spacing:.04em; }
 
-/* Card */
-.pretty-card {
-  background:var(--surface); border:1px solid var(--border);
-  border-radius:20px; overflow:hidden;
-  box-shadow:var(--shadow-sm);
-  transition:transform .35s var(--spring),box-shadow .35s;
-  position:relative;
-}
-.pretty-card:hover { transform:translateY(-5px); box-shadow:var(--shadow-lg); }
-.pretty-card.theme-dark { color:white; }
-.pretty-card.theme-dark .card-body  { color:rgba(255,255,255,.92); }
-.pretty-card.theme-dark .card-footer{ background:rgba(0,0,0,.08); color:rgba(255,255,255,.55); }
+    .login-panel { flex:1; display:flex; align-items:center; justify-content:center; padding:40px; background:var(--bg); }
+    .login-card {
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:20px; padding:44px 40px; width:100%; max-width:420px;
+      box-shadow:var(--shadow); animation:cardIn .4s var(--spring) both;
+    }
+    .login-greeting { font-size:1.65rem; font-weight:800; color:var(--ink); letter-spacing:-.03em; margin-bottom:4px; }
+    .login-sub      { font-size:.82rem; color:var(--ink3); margin-bottom:32px; }
+    .error-msg {
+      display:none; background:rgba(220,38,38,.06); border:1px solid rgba(220,38,38,.18);
+      color:var(--red); border-radius:var(--radius-sm); padding:10px 14px;
+      font-size:.82rem; font-weight:600; margin-bottom:16px; animation:fadeUp .2s var(--ease) both;
+    }
+    .error-msg.visible { display:block; }
+    .form-input-wrap { margin-bottom:16px; }
+    .form-input-wrap label { display:block; font-size:.7rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--ink3); margin-bottom:7px; }
+    .form-input { width:100%; padding:11px 14px; border:1.5px solid var(--border); border-radius:10px; font-family:inherit; font-size:.9rem; color:var(--ink); background:var(--surface2); outline:none; transition:border-color .15s,box-shadow .15s,background .15s; }
+    .form-input:focus { border-color:var(--green); box-shadow:0 0 0 3px var(--green-glow); background:var(--surface); }
+    .form-input.err { border-color:var(--red-l); }
+    .btn-login {
+      width:100%; padding:12px;
+      background:linear-gradient(135deg,var(--green-d),var(--green));
+      color:white; border:none; border-radius:10px; font-family:inherit;
+      font-size:.9rem; font-weight:700; cursor:pointer; margin-top:8px;
+      box-shadow:0 2px 12px rgba(5,150,105,.3);
+      transition:filter .15s,transform .12s var(--spring),box-shadow .15s;
+      display:flex; align-items:center; justify-content:center; gap:8px;
+    }
+    .btn-login:hover:not(:disabled){ filter:brightness(1.08); transform:translateY(-1px); box-shadow:0 4px 18px rgba(5,150,105,.38); }
+    .btn-login:active{ transform:scale(.97); }
+    .btn-login:disabled{ opacity:.7; cursor:not-allowed; }
+    .spin-mini { display:none; width:14px; height:14px; border:2px solid rgba(255,255,255,.35); border-top-color:white; border-radius:50%; animation:spin .6s linear infinite; }
+    .btn-login.loading .spin-mini { display:block; }
+    .role-hint { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:22px; padding-top:18px; border-top:1px solid var(--border); }
+    .role-hint-label { font-size:.68rem; color:var(--ink4); }
+    .role-badge { font-size:.65rem; font-weight:700; padding:3px 9px; border-radius:5px; text-transform:uppercase; letter-spacing:.04em; }
+    .role-admin  { background:var(--green-xll); color:var(--green-d); border:1px solid var(--green-ll); }
+    .role-viewer { background:var(--surface2); color:var(--ink3); border:1px solid var(--border); }
+    .login-footer { font-size:.72rem; color:var(--ink4); text-align:center; margin-top:20px; line-height:1.65; }
 
-.card-image-wrap { width:100%; height:210px; background:var(--surface2); overflow:hidden; }
-.card-image-wrap img { width:100%; height:100%; object-fit:cover; transition:.5s; }
-.pretty-card:hover .card-image-wrap img { transform:scale(1.03); }
-
-.admin-toolbar { position:absolute; top:10px; left:10px; right:10px; display:flex; gap:5px; opacity:0; transition:.25s; z-index:10; }
-.pretty-card:hover .admin-toolbar { opacity:1; }
-.tool-btn {
-  background:rgba(255,255,255,.94); backdrop-filter:blur(8px);
-  border:1px solid rgba(0,0,0,.06); padding:5px 10px; border-radius:7px;
-  font-size:.68rem; font-weight:800; cursor:pointer; color:var(--ink2); transition:.15s;
-}
-.tool-btn:hover { background:var(--green); color:white; border-color:var(--green); }
-
-.card-content { padding:26px 28px 20px; }
-.badge { background:var(--green-xll); color:var(--green-d); border:1px solid var(--green-ll); padding:3px 10px; border-radius:6px; font-size:.62rem; font-weight:800; text-transform:uppercase; margin-bottom:12px; display:inline-block; letter-spacing:.05em; }
-.card-body { font-size:1.05rem; min-height:80px; outline:none; white-space:pre-wrap; margin-bottom:20px; font-weight:500; line-height:1.65; color:var(--ink2); }
-.card-controls { display:flex; align-items:center; justify-content:space-between; border-top:1px solid var(--border); padding-top:16px; }
-.color-dots { display:flex; gap:10px; align-items:center; }
-.dot { width:22px; height:22px; border-radius:50%; cursor:pointer; border:2px solid var(--border2); transition:.18s; box-shadow:var(--shadow-xs); }
-.dot:hover { transform:scale(1.25); }
-.dot.active { border:3.5px solid var(--green) !important; transform:scale(1.12); box-shadow:0 0 0 2px white; }
-.delete-btn { cursor:pointer; color:var(--border2); font-size:1rem; transition:.18s; }
-.delete-btn:hover { color:var(--red-l); }
-.card-footer { padding:11px 28px; font-size:.7rem; color:var(--ink4); font-weight:600; border-top:1px solid var(--border); }
-
-/* Skeleton */
-.skeleton-card { height:380px; border-radius:20px; }
-
-/* Gallery modal */
-.gallery-overlay { position:fixed; inset:0; background:rgba(0,0,0,.45); backdrop-filter:blur(10px); display:none; place-items:center; z-index:2000; padding:20px; }
-.gallery-overlay.active { display:grid; }
-.gallery-window { background:var(--surface); width:100%; max-width:820px; padding:32px; border-radius:24px; box-shadow:var(--shadow-lg); }
-.gallery-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:22px; }
-.gallery-header h2 { font-size:1.25rem; font-weight:800; color:var(--ink); }
-.gallery-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(170px,1fr)); gap:14px; }
-.gallery-item { width:100%; height:120px; object-fit:cover; border-radius:14px; cursor:pointer; border:3px solid transparent; transition:.18s; }
-.gallery-item:hover { border-color:var(--green); transform:translateY(-3px); box-shadow:var(--shadow); }
-
-body:not(.is-admin) .admin-only { display:none !important; }
-```
-
+    @media(max-width:768px){
+      body{flex-direction:column;}
+      .brand-panel{width:100%;padding:28px 24px 20px;}
+      .brand-headline{font-size:1.5rem;}
+      .plant-stats{flex-direction:row;flex-wrap:wrap;}
+      .stat-pill{flex:1;min-width:140px;}
+      .login-panel{padding:24px 20px;}
+      .login-card{padding:28px 22px;}
+    }
   </style>
 </head>
-<body id="main-body">
-
-<div class="top-nav">
-  <div class="logo">
-    <div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M3 3h7v7H3zm0 11h7v7H3zm11-11h7v7h-7zm0 11h7v7h-7z"/></svg></div>
-    <span class="logo-text">Novus <span>Foods</span> Ops</span>
-  </div>
-  <nav class="nav-tabs">
-    <a class="nav-tab active" href="dds-announcements.html">DDS Announcements</a>
-    <a class="nav-tab" href="dds-dashboard.html">DDS Dashboard</a>
-    <a class="nav-tab" href="dds-rules.html">Rules of Engagement</a>
-    <a class="nav-tab" href="dds-corevalues.html">Core Values</a>
-    <a class="nav-tab" href="staff-meeting-dashboard.html">Customizable Dashboard</a>
-    <a class="nav-tab" href="play-call.html">Play Call</a>
-    <a class="nav-tab" href="needs-action.html">Needs Action</a>
-  </nav>
-  <button class="btn btn-ghost" style="font-size:.78rem;padding:6px 14px;" onclick="NovusCore.navigateTo('index.html')">Logout</button>
-</div>
-
-<div class="page">
-  <div class="header-flex">
-    <div style="display:flex;align-items:center;">
-      <h2 class="page-title">DDS Announcements</h2>
-      <span class="sync-badge" id="sync-badge">Syncing…</span>
+<body>
+  <div class="brand-panel">
+    <div class="brand-top">
+      <div class="brand-logo">
+        <div class="brand-logo-icon">🍅</div>
+        <div><div class="brand-logo-name">Novus Foods</div><div class="brand-logo-sub">Plant 1730 · Buena Park, CA</div></div>
+      </div>
+      <h1 class="brand-headline">Operations<br><span>Hub.</span></h1>
+      <p class="brand-desc">Real-time visibility into safety, quality, production, and inventory — built for the floor.</p>
+      <div class="plant-stats">
+        <div class="stat-pill"><span class="stat-icon">🏭</span><div><div class="stat-label">Facility</div><div class="stat-value">Plant 1730 — Buena Park</div></div></div>
+        <div class="stat-pill"><span class="stat-icon">🥫</span><div><div class="stat-label">Products</div><div class="stat-value">Salsa &amp; Layered Products</div></div></div>
+        <div class="stat-pill"><span class="stat-icon">⚙️</span><div><div class="stat-label">Lines</div><div class="stat-value">2A · PL1 · MP4 · PXM6 · PL2 · 2E</div></div></div>
+        <div class="stat-pill"><span class="stat-icon">📋</span><div><div class="stat-label">Modules</div><div class="stat-value">DDS · Cycle Count · Needs Action</div></div></div>
+      </div>
     </div>
-    <button class="btn btn-primary admin-only" onclick="addItem()">+ Post New Update</button>
+    <div class="brand-bottom">NOVUS FOODS 1730 OPS HUB &nbsp;·&nbsp; INTERNAL TOOL</div>
   </div>
-  <div class="board-container" id="board">
-    <div class="skeleton skeleton-card"></div>
-    <div class="skeleton skeleton-card"></div>
-    <div class="skeleton skeleton-card"></div>
-  </div>
-</div>
 
-<div class="gallery-overlay" id="galleryOverlay">
-  <div class="gallery-window">
-    <div class="gallery-header">
-      <h2>Select Cover Image</h2>
-      <button class="btn btn-ghost" onclick="closeGallery()">Close</button>
-    </div>
-    <div class="gallery-grid" id="galleryGrid"></div>
-    <div style="text-align:center;border-top:1px solid var(--border);padding-top:18px;margin-top:8px;">
-      <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">Upload Custom Image</button>
-      <input type="file" id="fileInput" style="display:none" accept="image/*" onchange="handleFileUpload(event)">
+  <div class="login-panel">
+    <div class="login-card">
+      <div class="login-greeting">Welcome back.</div>
+      <div class="login-sub">Sign in with your Plant 1730 credentials.</div>
+      <div class="error-msg" id="error-msg"></div>
+      <div class="form-input-wrap"><label for="username">Username</label><input class="form-input" id="username" type="text" autocomplete="username" spellcheck="false" autocapitalize="none" placeholder="e.g. amendoza"/></div>
+      <div class="form-input-wrap"><label for="password">Password</label><input class="form-input" id="password" type="password" autocomplete="current-password" placeholder="••••••••"/></div>
+      <button class="btn-login" id="btn-login" onclick="handleLogin()"><div class="spin-mini"></div><span class="btn-text">Sign In</span></button>
+      <div class="role-hint">
+        <span class="role-hint-label">Roles:</span>
+        <span class="role-badge role-admin">Admin — post &amp; edit</span>
+        <span class="role-badge role-viewer">Viewer — read only</span>
+      </div>
+      <div class="login-footer">Plant 1730 internal tool. Authorized personnel only.<br>Contact your plant manager if you need access.</div>
     </div>
   </div>
-</div>
 
 <script>
-  const PROF_PRESETS=[
-    'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1565061828021-dd353ba0a1b7?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=800&q=80',
-  ];
-  const THEME_COLORS=['#ffffff','#e0f2fe','#dcfce7','#fef3c7','#fee2e2','#f3e8ff','#ccfbf1','#fce7f3'];
+  (function(){ try{ const u=JSON.parse(sessionStorage.getItem('novus1730_user')); if(u&&u.plant==='1730') window.location.replace('dds-announcements.html'); }catch(_){} })();
 
-  function checkAdmin(){try{const u=JSON.parse(sessionStorage.getItem('novus1730_user'));return u&&u.role==='admin';}catch(e){return false;}}
-  const isAdmin=checkAdmin();
-  if(isAdmin)document.getElementById('main-body').classList.add('is-admin');
+  const ALLOWED_USERS={'amendoza':{password:'1730data',plant:'1730',role:'admin'},'mcaballero':{password:'novus26',plant:'1730',role:'admin'},'vmarino':{password:'novus26',plant:'1730',role:'admin'},'csimonian':{password:'novus26',plant:'1730',role:'viewer'},'hdiaz':{password:'novus26',plant:'1730',role:'viewer'},'cmunoz':{password:'novus26',plant:'1730',role:'viewer'},'mvaladez':{password:'novus26',plant:'1730',role:'viewer'},'lestrada':{password:'novus26',plant:'1730',role:'viewer'},'hwang':{password:'novus26',plant:'1730',role:'viewer'}};
 
-  function showSync(){document.getElementById('sync-badge').classList.add('on');}
-  function hideSync(){setTimeout(()=>document.getElementById('sync-badge').classList.remove('on'),900);}
-  function parseStyle(s){const p=(s||'').split('|');return{bg:p[0]||'#ffffff',align:p[1]||'left',theme:p[2]||'light'};}
-
-  async function loadData(){
-    const{data,error}=await NovusDB.announcements.getAll();
-    if(error){console.error(error);return;}
-    const container=document.getElementById('board');
-    if(!data.length){container.innerHTML='<p style="color:var(--ink4);padding:20px;">No announcements yet.</p>';return;}
-    container.innerHTML=data.map(item=>{
-      const style=parseStyle(item.color);
-      return`<div class="pretty-card theme-${style.theme}" id="card-${item.id}" style="background-color:${style.bg}" data-raw-style="${item.color}">
-        <div class="admin-toolbar admin-only">
-          <button class="tool-btn" onclick="openGallery('${item.id}')">🖼️ Image</button>
-          <button class="tool-btn" onclick="updateStyle('${item.id}','align','left')">Left</button>
-          <button class="tool-btn" onclick="updateStyle('${item.id}','align','center')">Center</button>
-          <button class="tool-btn" onclick="updateStyle('${item.id}','theme','${style.theme==='light'?'dark':'light'}')">🌓 Mode</button>
-        </div>
-        <div class="card-image-wrap"><img src="${item.image||PROF_PRESETS[0]}" id="img-${item.id}" alt="cover"></div>
-        <div class="card-content">
-          <span class="badge">Announcement ${item.number}</span>
-          <div class="card-body" id="body-${item.id}" style="text-align:${style.align}" contenteditable="${isAdmin}" onblur="updateField('${item.id}','text',this.innerText.trim())">${item.text}</div>
-          <div class="card-controls">
-            <div class="color-dots admin-only">
-              ${THEME_COLORS.map(c=>`<div class="dot${style.bg.toLowerCase()===c.toLowerCase()?' active':''}" style="background:${c}" data-color="${c}" onclick="updateStyle('${item.id}','bg','${c}')"></div>`).join('')}
-            </div>
-            ${isAdmin?`<span class="delete-btn" onclick="deleteItem('${item.id}')">🗑️</span>`:''}
-          </div>
-        </div>
-        <div class="card-footer">${item.date}</div>
-      </div>`;
-    }).join('');
+  const usernameEl=document.getElementById('username'),passwordEl=document.getElementById('password'),btnEl=document.getElementById('btn-login'),errorEl=document.getElementById('error-msg');
+  document.addEventListener('keydown',e=>{if(e.key==='Enter')handleLogin();});
+  [usernameEl,passwordEl].forEach(el=>el.addEventListener('input',()=>{errorEl.classList.remove('visible');el.classList.remove('err');}));
+  function showError(msg){errorEl.textContent=msg;errorEl.classList.add('visible');passwordEl.value='';passwordEl.focus();[usernameEl,passwordEl].forEach(el=>el.classList.add('err'));}
+  function handleLogin(){
+    const username=usernameEl.value.trim().toLowerCase(),password=passwordEl.value.trim();
+    errorEl.classList.remove('visible');
+    if(!username||!password){showError('Please enter both username and password.');return;}
+    const user=ALLOWED_USERS[username];
+    if(!user||user.password!==password||user.plant!=='1730'){showError('Invalid Plant 1730 credentials.');return;}
+    btnEl.disabled=true;btnEl.classList.add('loading');btnEl.querySelector('.btn-text').textContent='Signing in…';
+    try{sessionStorage.setItem('novus1730_user',JSON.stringify({username,plant:user.plant,role:user.role,loginTime:new Date().toISOString()}));}catch(_){}
+    setTimeout(()=>{window.location.href='dds-announcements.html';},350);
   }
-
-  async function updateField(id,field,value){
-    if(!isAdmin)return; showSync();
-    await NovusDB.announcements.updateField(id,field,value);
-    hideSync();
-  }
-  async function updateStyle(id,prop,val){
-    if(!isAdmin)return;
-    const card=document.getElementById(`card-${id}`),body=document.getElementById(`body-${id}`);
-    const style=parseStyle(card.getAttribute('data-raw-style'));
-    style[prop]=val;
-    if(prop==='bg'){card.style.backgroundColor=val;card.querySelectorAll('.dot').forEach(d=>d.classList.toggle('active',d.getAttribute('data-color')===val));}
-    if(prop==='align')body.style.textAlign=val;
-    if(prop==='theme'){card.classList.remove('theme-light','theme-dark');card.classList.add(`theme-${val}`);}
-    const newStr=`${style.bg}|${style.align}|${style.theme}`;
-    card.setAttribute('data-raw-style',newStr);
-    await updateField(id,'color',newStr);
-  }
-  async function addItem(){
-    if(!isAdmin)return; showSync();
-    const newItem={id:Date.now().toString(),number:document.querySelectorAll('.pretty-card').length+1,text:'New update — click to edit this message…',date:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}),image:PROF_PRESETS[0],color:'#ffffff|left|light'};
-    await NovusDB.announcements.add(newItem);
-    hideSync();
-  }
-  async function deleteItem(id){
-    if(!confirm('Delete globally?'))return; showSync();
-    await NovusDB.announcements.delete(id);
-    hideSync();
-  }
-  let activeCardId=null;
-  function openGallery(id){activeCardId=id;document.getElementById('galleryGrid').innerHTML=PROF_PRESETS.map(url=>`<img src="${url}" class="gallery-item" onclick="selectPreset('${url}')" alt="preset">`).join('');document.getElementById('galleryOverlay').classList.add('active');}
-  function closeGallery(){document.getElementById('galleryOverlay').classList.remove('active');}
-  async function selectPreset(url){document.getElementById(`img-${activeCardId}`).src=url;await updateField(activeCardId,'image',url);closeGallery();}
-  function handleFileUpload(e){const file=e.target.files[0];const reader=new FileReader();reader.onload=async ev=>{document.getElementById(`img-${activeCardId}`).src=ev.target.result;await updateField(activeCardId,'image',ev.target.result);closeGallery();};reader.readAsDataURL(file);}
-
-  window.onload=()=>{
-    NovusCore.requireAuth();
-    loadData();
-    NovusDB.announcements.subscribe(()=>loadData());
-  };
 </script>
-
 </body>
 </html>
