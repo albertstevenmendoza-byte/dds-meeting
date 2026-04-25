@@ -1272,3 +1272,184 @@ select:focus, input:focus, textarea:focus { border-color:var(--green); box-shado
   gap: 5px;
 }
 .btn-cmd-na:hover { background: rgba(251,191,36,.18); border-color: rgba(251,191,36,.4); }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   HELP / FAQ OVERLAY
+══════════════════════════════════════════════════════════════════════════ */
+#help-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s var(--ease);
+}
+#help-overlay.help-visible { opacity:1; pointer-events:all; }
+
+.help-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15,23,42,.72);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+.help-panel {
+  position: relative;
+  z-index: 1;
+  background: #0d1f18;
+  border: 1px solid #1e3d2c;
+  border-radius: 16px;
+  padding: 28px 32px 24px;
+  width: min(720px, calc(100vw - 48px));
+  max-height: calc(100vh - 80px);
+  overflow-y: auto;
+  box-shadow: 0 32px 80px rgba(0,0,0,.5), 0 8px 24px rgba(0,0,0,.3);
+  transform: translateY(20px) scale(.97);
+  transition: transform .3s var(--spring);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+#help-overlay.help-visible .help-panel { transform: none; }
+
+.help-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.help-header-left { display:flex; align-items:center; gap:12px; }
+.help-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: white;
+  letter-spacing: -.02em;
+}
+.help-sub {
+  font-size: .82rem;
+  color: rgba(255,255,255,.4);
+  margin-top: -8px;
+}
+
+/* Search */
+.help-search-wrap { position: relative; }
+.help-search {
+  width: 100%;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: var(--radius-sm);
+  color: white;
+  font-family: var(--font);
+  font-size: .84rem;
+  padding: 9px 14px 9px 36px;
+  outline: none;
+  transition: border-color .15s, background .15s;
+}
+.help-search::placeholder { color: rgba(255,255,255,.25); }
+.help-search:focus { border-color: var(--green-l); background: rgba(255,255,255,.09); }
+.help-search-wrap::before {
+  content: '';
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,.3)' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+
+/* FAQ accordion */
+.help-list { display:flex; flex-direction:column; gap:6px; }
+
+.help-card {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  transition: border-color .15s;
+}
+.help-card:hover { border-color: rgba(255,255,255,.14); }
+.help-card.open { border-color: rgba(16,185,129,.25); background: rgba(5,150,105,.06); }
+
+.help-q {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px 16px;
+  background: none;
+  border: none;
+  color: rgba(255,255,255,.85);
+  font-family: var(--font);
+  font-size: .84rem;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: color .15s;
+}
+.help-q:hover { color: white; }
+.help-card.open .help-q { color: var(--green-l); }
+
+.help-chevron {
+  flex-shrink: 0;
+  opacity: .4;
+  transition: transform .2s var(--ease), opacity .15s;
+}
+.help-card.open .help-chevron { transform: rotate(180deg); opacity: .8; }
+
+.help-a {
+  max-height: 0;
+  overflow: hidden;
+  padding: 0 16px;
+  color: rgba(255,255,255,.6);
+  font-size: .82rem;
+  line-height: 1.75;
+  transition: max-height .25s var(--ease), padding .25s var(--ease);
+}
+.help-card.open .help-a {
+  max-height: 300px;
+  padding: 0 16px 14px;
+}
+
+/* Footer */
+.help-footer {
+  font-size: .65rem;
+  font-family: var(--mono);
+  color: rgba(255,255,255,.2);
+  text-align: center;
+  padding-top: 4px;
+  border-top: 1px solid rgba(255,255,255,.06);
+  letter-spacing: .04em;
+}
+
+/* Help button in nav */
+.btn-cmd-help {
+  background: rgba(255,255,255,.06);
+  color: rgba(255,255,255,.7);
+  border: 1px solid rgba(255,255,255,.1);
+  gap: 5px;
+}
+.btn-cmd-help:hover { background: rgba(255,255,255,.12); color: white; }
+
+/* ── More (···) dropdown — replaces individual header buttons ── */
+.cmd-more-wrap { position: relative; }
+
+.more-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  width: 220px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  padding: 5px;
+  z-index: 400;
+  animation: fadeDown .12s var(--ease-out) both;
+}
+.more-dropdown.hidden { display: none; }
