@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
@@ -7,68 +6,65 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="novus-styles.css">
-  <script src="https://alcdn.msauth.net/browser/2.38.3/js/msal-browser.min.js"></script>
-  <script src="sharepoint-config.js"></script>
+  <script src="gas-config.js"></script>
   <script src="novus-core.js"></script>
   <script>
+    // Chart.js is required to render; XLSX is optional (manual upload only)
     window.__libs={chartjs:false,xlsx:false};
-    function _checkLibsReady(){if(window.__libs.chartjs&&window.__libs.xlsx&&window.__libsCallback)window.__libsCallback();}
+    function _checkLibsReady(){if(window.__libs.chartjs&&window.__libsCallback)window.__libsCallback();}
   </script>
   <script async src="https://cdn.jsdelivr.net/npm/chart.js" onload="window.__libs.chartjs=true;_checkLibsReady()"></script>
-  <script async src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js" onload="window.__libs.xlsx=true;_checkLibsReady()"></script>
+  <script async src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js" onload="window.__libs.xlsx=true"></script>
   <script async src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
   <style>
     /* ── Dashboard-specific layout ── */
     .date-header { text-align:center; font-size:.88rem; font-weight:600; font-family:'DM Mono',monospace; color:var(--ink3); padding:14px 0 0; }
     .dash-grid { display:grid; grid-template-columns:repeat(12,1fr); gap:14px; margin:14px 0; }
 
-```
-/* Refresh control bar */
-.ctrl-bar { display:flex; align-items:center; justify-content:space-between; padding:8px 24px; background:var(--surface); border-bottom:1px solid var(--border); font-size:.72rem; color:var(--ink3); }
-.ctrl-left { display:flex; align-items:center; gap:16px; }
-.ctrl-clock { font-family:'DM Mono',monospace; }
-.toggle-wrap { display:flex; align-items:center; gap:6px; cursor:pointer; }
-.toggle { width:30px; height:17px; background:var(--border2); border-radius:9px; position:relative; cursor:pointer; border:none; padding:0; transition:background .2s; }
-.toggle.on { background:var(--green); }
-.toggle::after { content:''; position:absolute; top:2px; left:2px; width:13px; height:13px; background:white; border-radius:50%; transition:transform .2s; box-shadow:0 1px 3px rgba(0,0,0,.2); }
-.toggle.on::after { transform:translateX(13px); }
-.interval-sel { font-family:inherit; font-size:.72rem; border:1px solid var(--border); border-radius:5px; padding:2px 6px; background:var(--surface2); color:var(--ink2); }
-#data-status { font-size:.7rem; font-family:'DM Mono',monospace; color:var(--ink3); }
-#data-status.ok    { color:var(--green); }
-#data-status.error { color:var(--red); }
-#data-status.loading { color:var(--amber-l); }
+    /* Refresh control bar */
+    .ctrl-bar { display:flex; align-items:center; justify-content:space-between; padding:8px 24px; background:var(--surface); border-bottom:1px solid var(--border); font-size:.72rem; color:var(--ink3); }
+    .ctrl-left { display:flex; align-items:center; gap:16px; }
+    .ctrl-clock { font-family:'DM Mono',monospace; }
+    .toggle-wrap { display:flex; align-items:center; gap:6px; cursor:pointer; }
+    .toggle { width:30px; height:17px; background:var(--border2); border-radius:9px; position:relative; cursor:pointer; border:none; padding:0; transition:background .2s; }
+    .toggle.on { background:var(--green); }
+    .toggle::after { content:''; position:absolute; top:2px; left:2px; width:13px; height:13px; background:white; border-radius:50%; transition:transform .2s; box-shadow:0 1px 3px rgba(0,0,0,.2); }
+    .toggle.on::after { transform:translateX(13px); }
+    .interval-sel { font-family:inherit; font-size:.72rem; border:1px solid var(--border); border-radius:5px; padding:2px 6px; background:var(--surface2); color:var(--ink2); }
+    #data-status { font-size:.7rem; font-family:'DM Mono',monospace; color:var(--ink3); }
+    #data-status.ok    { color:var(--green); }
+    #data-status.error { color:var(--red); }
+    #data-status.loading { color:var(--amber-l); }
 
-/* Production */
-.prod-split { display:grid; grid-template-columns:1fr 1.8fr; gap:20px; }
-.timeframe-block { padding:9px 14px; border-radius:var(--radius-sm); display:flex; flex-direction:column; align-items:center; margin-bottom:12px; }
-.tf-today { background:linear-gradient(135deg,var(--green-d),var(--green)); color:white; }
-.tf-yesterday { background:linear-gradient(135deg,var(--ink2),var(--ink)); color:white; }
-.timeframe-title { font-size:.82rem; font-weight:800; text-transform:uppercase; letter-spacing:.07em; }
-.timeframe-date  { font-family:'DM Mono',monospace; font-size:.68rem; opacity:.8; margin-top:2px; }
-.split-row { display:flex; gap:14px; }
-.split-col { flex:1; display:flex; flex-direction:column; gap:8px; }
-.col-label { background:var(--surface2); padding:4px; border-radius:var(--radius-xs); border:1px solid var(--border); text-align:center; font-weight:800; font-size:.66rem; color:var(--ink3); text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px; }
-.readiness-stack { background:var(--green-xll); border:1px solid var(--green-ll); border-radius:var(--radius-sm); padding:8px; display:flex; flex-direction:column; gap:7px; }
-.readiness-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-sm); padding:8px; text-align:center; }
-.readiness-line { font-weight:800; font-size:.75rem; color:var(--green-d); margin-bottom:5px; border-bottom:1px solid var(--border); padding-bottom:2px; }
-.status-pill { font-size:.63rem; font-weight:700; padding:3px 6px; border-radius:4px; display:flex; justify-content:space-between; align-items:center; margin-top:3px; }
-.pill-yes { background:rgba(5,150,105,.1); color:var(--green-d); }
-.pill-no  { background:rgba(239,68,68,.1);  color:var(--red-l); }
-.pill-label { opacity:.6; font-size:.57rem; }
+    /* Production */
+    .prod-split { display:grid; grid-template-columns:1fr 1.8fr; gap:20px; }
+    .timeframe-block { padding:9px 14px; border-radius:var(--radius-sm); display:flex; flex-direction:column; align-items:center; margin-bottom:12px; }
+    .tf-today { background:linear-gradient(135deg,var(--green-d),var(--green)); color:white; }
+    .tf-yesterday { background:linear-gradient(135deg,var(--ink2),var(--ink)); color:white; }
+    .timeframe-title { font-size:.82rem; font-weight:800; text-transform:uppercase; letter-spacing:.07em; }
+    .timeframe-date  { font-family:'DM Mono',monospace; font-size:.68rem; opacity:.8; margin-top:2px; }
+    .split-row { display:flex; gap:14px; }
+    .split-col { flex:1; display:flex; flex-direction:column; gap:8px; }
+    .col-label { background:var(--surface2); padding:4px; border-radius:var(--radius-xs); border:1px solid var(--border); text-align:center; font-weight:800; font-size:.66rem; color:var(--ink3); text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px; }
+    .readiness-stack { background:var(--green-xll); border:1px solid var(--green-ll); border-radius:var(--radius-sm); padding:8px; display:flex; flex-direction:column; gap:7px; }
+    .readiness-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-sm); padding:8px; text-align:center; }
+    .readiness-line { font-weight:800; font-size:.75rem; color:var(--green-d); margin-bottom:5px; border-bottom:1px solid var(--border); padding-bottom:2px; }
+    .status-pill { font-size:.63rem; font-weight:700; padding:3px 6px; border-radius:4px; display:flex; justify-content:space-between; align-items:center; margin-top:3px; }
+    .pill-yes { background:rgba(5,150,105,.1); color:var(--green-d); }
+    .pill-no  { background:rgba(239,68,68,.1);  color:var(--red-l); }
+    .pill-label { opacity:.6; font-size:.57rem; }
 
-/* Plan */
-.plan-body { min-height:200px; outline:none; white-space:pre-wrap; color:var(--ink2); font-size:.95rem; background:var(--surface2); font-family:'DM Sans',sans-serif; line-height:1.65; padding:16px; border-radius:var(--radius-sm); border:1px solid var(--border); }
-.plan-body:focus { background:var(--surface); box-shadow:inset 0 0 0 1.5px var(--green); }
+    /* Plan */
+    .plan-body { min-height:200px; outline:none; white-space:pre-wrap; color:var(--ink2); font-size:.95rem; background:var(--surface2); font-family:'DM Sans',sans-serif; line-height:1.65; padding:16px; border-radius:var(--radius-sm); border:1px solid var(--border); }
+    .plan-body:focus { background:var(--surface); box-shadow:inset 0 0 0 1.5px var(--green); }
 
-/* Resizer */
-.resizer { position:absolute; right:0; bottom:0; width:20px; height:20px; cursor:nwse-resize; clip-path:polygon(100% 0,100% 100%,0 100%); background:linear-gradient(135deg,var(--border2),var(--green)); opacity:0; transition:opacity .2s; border-radius:0 0 var(--radius) 0; }
-.panel:hover .resizer { opacity:.5; }
+    /* Resizer */
+    .resizer { position:absolute; right:0; bottom:0; width:20px; height:20px; cursor:nwse-resize; clip-path:polygon(100% 0,100% 100%,0 100%); background:linear-gradient(135deg,var(--border2),var(--green)); opacity:0; transition:opacity .2s; border-radius:0 0 var(--radius) 0; }
+    .panel:hover .resizer { opacity:.5; }
 
-/* Skeleton */
-@keyframes shimmer{0%{background-position:-600px 0}100%{background-position:600px 0}}
-.skel { border-radius:var(--radius); background:linear-gradient(90deg,#e6ece9 25%,#eff4f1 50%,#e6ece9 75%); background-size:600px 100%; animation:shimmer 1.4s infinite linear; }
-```
-
+    /* Skeleton */
+    @keyframes shimmer{0%{background-position:-600px 0}100%{background-position:600px 0}}
+    .skel { border-radius:var(--radius); background:linear-gradient(90deg,#e6ece9 25%,#eff4f1 50%,#e6ece9 75%); background-size:600px 100%; animation:shimmer 1.4s infinite linear; }
   </style>
 </head>
 <body>
@@ -86,24 +82,22 @@
   </nav>
   <div style="display:flex;gap:8px;align-items:center;">
     <span id="data-status">—</span>
-    <button class="btn btn-ms" id="btn-sp" onclick="fetchFromSharePoint()">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-      Load from SharePoint
+    <button class="btn btn-primary" id="btn-gas" onclick="fetchFromGAS()" style="font-size:.78rem;padding:7px 14px;">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.08-5.96"/></svg>
+      Refresh Data
     </button>
-    <label class="btn btn-ghost" style="cursor:pointer;font-size:.75rem;padding:6px 12px;">⬆ Upload<input type="file" id="file-upload" accept=".xlsx,.xls" style="display:none" onchange="handleUpload(event)"></label>
+    <label class="btn btn-ghost" style="cursor:pointer;font-size:.75rem;padding:6px 12px;" title="Upload Excel as fallback">⬆ Upload XLSX<input type="file" id="file-upload" accept=".xlsx,.xls" style="display:none" onchange="handleUpload(event)"></label>
     <button class="btn btn-danger" style="font-size:.75rem;padding:6px 12px;" onclick="NovusCore.navigateTo('index.html')">Logout</button>
   </div>
 </div>
 
-<!-- SharePoint status bar -->
-
+<!-- Status bar -->
 <div class="sp-bar" id="sp-bar">
-  <div class="sp-bar-left"><div class="sp-spinner" id="sp-spinner"></div><span id="sp-msg">Connecting…</span></div>
+  <div class="sp-bar-left"><div class="sp-spinner" id="sp-spinner"></div><span id="sp-msg">Connecting to Google Sheets…</span></div>
   <span style="font-size:.68rem;opacity:.85;font-family:'DM Mono',monospace;" id="sp-time"></span>
 </div>
 
 <!-- Auto-refresh control bar -->
-
 <div class="ctrl-bar">
   <div class="ctrl-left">
     <span class="ctrl-clock" id="ctrl-clock">—</span>
@@ -125,180 +119,178 @@
   <div class="date-header" id="date-header">Loading…</div>
   <div class="dash-grid" id="main-sortable">
 
-```
-<!-- SAFETY -->
-<div class="panel" style="grid-column:span 4;position:relative;" id="panel-safety">
-  <div class="panel-header"><span class="panel-title">🦺 Safety</span></div>
-  <div class="panel-date" id="date-safety">—</div>
-  <div class="panel-body">
-    <div class="metric-row">
-      <div class="metric-box"><div class="metric-label">Days Without Incident</div><div class="metric-value" id="days-incident" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-      <div class="metric-box"><div class="metric-label">Near Misses</div><div class="metric-value" id="near-misses" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-    </div>
-    <div class="metric-row">
-      <div class="metric-box"><div class="metric-label">Safety Audits</div><div class="metric-value" id="safety-audits" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-      <div class="metric-box"><div class="metric-label">Meal Penalties</div><div class="metric-value" id="meal-penalties" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-    </div>
-  </div>
-  <div class="resizer"></div>
-</div>
-
-<!-- QUALITY -->
-<div class="panel" style="grid-column:span 8;position:relative;" id="panel-quality">
-  <div class="panel-header"><span class="panel-title">✅ Quality</span></div>
-  <div class="panel-date" id="date-quality">—</div>
-  <div class="panel-body">
-    <div class="metric-row">
-      <div class="metric-box"><div class="metric-label">Holds</div><div class="metric-value" id="holds" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-      <div class="metric-box"><div class="metric-label">Holds / COA</div><div class="metric-value" id="holds-coa" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-      <div class="metric-box"><div class="metric-label">PEM %</div><div class="metric-value" id="pem" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-      <div class="metric-box"><div class="metric-label">Complaints</div><div class="metric-value" id="complaints" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-    </div>
-    <div class="metric-row">
-      <div class="metric-box"><div class="metric-label">Pre-Op %</div><div class="metric-value" id="san-preop" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-      <div class="metric-box"><div class="metric-label">MSS %</div><div class="metric-value" id="san-mss" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-      <div style="flex:2"><div class="section-label">Sanitation Notes</div><div class="drivers-box" id="san-notes" contenteditable="true" oninput="saveManual(this.id)" style="min-height:48px;">—</div></div>
-    </div>
-  </div>
-  <div class="resizer"></div>
-</div>
-
-<!-- PRODUCTION -->
-<div class="panel" style="grid-column:span 12;position:relative;" id="panel-production">
-  <div class="panel-header"><span class="panel-title">⚙️ Production Summary</span></div>
-  <div class="panel-body">
-    <div class="prod-split">
-      <div>
-        <div class="timeframe-block tf-today"><div class="timeframe-title">Today's Operational Status</div><div class="timeframe-date" id="today-date-label">—</div></div>
-        <div class="split-row">
-          <div class="split-col"><div class="col-label">Salsa Lines</div><div class="readiness-stack" id="readiness-salsa"></div></div>
-          <div class="split-col"><div class="col-label">Layer Lines</div><div class="readiness-stack" id="readiness-layer"></div></div>
-        </div>
-      </div>
-      <div>
-        <div class="timeframe-block tf-yesterday"><div class="timeframe-title">Yesterday's Performance</div><div class="timeframe-date" id="yesterday-date-label">—</div></div>
+    <!-- SAFETY -->
+    <div class="panel" style="grid-column:span 4;position:relative;" id="panel-safety">
+      <div class="panel-header"><span class="panel-title">🦺 Safety</span></div>
+      <div class="panel-date" id="date-safety">—</div>
+      <div class="panel-body">
         <div class="metric-row">
-          <div class="metric-box"><div class="metric-label">Code Red</div><div class="metric-value" id="code-red" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-          <div class="metric-box"><div class="metric-label">Code Yellow</div><div class="metric-value" id="code-yellow" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-          <div style="flex:2"><div class="section-label">Top Downtime Drivers</div><div class="drivers-box alert" id="top-drivers">Scanning data…</div></div>
+          <div class="metric-box"><div class="metric-label">Days Without Incident</div><div class="metric-value" id="days-incident" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
+          <div class="metric-box"><div class="metric-label">Near Misses</div><div class="metric-value" id="near-misses" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
         </div>
-        <div class="split-row" style="margin-top:12px;">
-          <div class="split-col"><div class="col-label">Salsa Lines</div><table class="data-table"><thead><tr><th>Line</th><th>OEE</th><th>Attainment</th><th>DT</th></tr></thead><tbody id="tbody-salsa"></tbody></table></div>
-          <div class="split-col"><div class="col-label">Layer Lines</div><table class="data-table"><thead><tr><th>Line</th><th>OEE</th><th>Attainment</th><th>DT</th></tr></thead><tbody id="tbody-layer"></tbody></table></div>
+        <div class="metric-row">
+          <div class="metric-box"><div class="metric-label">Safety Audits</div><div class="metric-value" id="safety-audits" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
+          <div class="metric-box"><div class="metric-label">Meal Penalties</div><div class="metric-value" id="meal-penalties" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
         </div>
       </div>
+      <div class="resizer"></div>
     </div>
-    <div class="chart-wrap" style="height:195px;margin-top:12px;"><canvas id="production-chart"></canvas></div>
-  </div>
-  <div class="resizer"></div>
-</div>
 
-<!-- COSTS -->
-<div class="panel" style="grid-column:span 4;position:relative;">
-  <div class="panel-header"><span class="panel-title">💰 Costs</span></div>
-  <div class="panel-date" id="date-costs">—</div>
-  <div class="panel-body">
-    <table class="data-table">
-      <thead><tr><th>Metric</th><th>Direct</th><th>Indirect</th></tr></thead>
-      <tbody>
-        <tr><td>Cost / Lb</td><td id="cost-direct" contenteditable="true" oninput="saveManual(this.id)">—</td><td id="cost-indirect" contenteditable="true" oninput="saveManual(this.id)">—</td></tr>
-        <tr><td>Lb / hr</td><td id="pound-hr-direct" contenteditable="true" oninput="saveManual(this.id)">—</td><td id="pound-hr-indirect" contenteditable="true" oninput="saveManual(this.id)">—</td></tr>
-        <tr><td>Proj. Conversion</td><td colspan="2" id="conversion-costs" contenteditable="true" oninput="saveManual(this.id)">—</td></tr>
-        <tr><td>Lbs Produced</td><td colspan="2" id="pounds-prod" contenteditable="true" oninput="saveManual(this.id)">—</td></tr>
-      </tbody>
-    </table>
-    <div><div class="section-label">OT Trend by Dept — Last 30 Days</div><div class="chart-wrap" style="height:185px;"><canvas id="costs-ot-chart"></canvas></div></div>
-  </div>
-  <div class="resizer"></div>
-</div>
+    <!-- QUALITY -->
+    <div class="panel" style="grid-column:span 8;position:relative;" id="panel-quality">
+      <div class="panel-header"><span class="panel-title">✅ Quality</span></div>
+      <div class="panel-date" id="date-quality">—</div>
+      <div class="panel-body">
+        <div class="metric-row">
+          <div class="metric-box"><div class="metric-label">Holds</div><div class="metric-value" id="holds" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
+          <div class="metric-box"><div class="metric-label">Holds / COA</div><div class="metric-value" id="holds-coa" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
+          <div class="metric-box"><div class="metric-label">PEM %</div><div class="metric-value" id="pem" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
+          <div class="metric-box"><div class="metric-label">Complaints</div><div class="metric-value" id="complaints" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
+        </div>
+        <div class="metric-row">
+          <div class="metric-box"><div class="metric-label">Pre-Op %</div><div class="metric-value" id="san-preop" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
+          <div class="metric-box"><div class="metric-label">MSS %</div><div class="metric-value" id="san-mss" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
+          <div style="flex:2"><div class="section-label">Sanitation Notes</div><div class="drivers-box" id="san-notes" contenteditable="true" oninput="saveManual(this.id)" style="min-height:48px;">—</div></div>
+        </div>
+      </div>
+      <div class="resizer"></div>
+    </div>
 
-<!-- HR -->
-<div class="panel" style="grid-column:span 4;position:relative;">
-  <div class="panel-header"><span class="panel-title">👥 HR | Training</span></div>
-  <div class="panel-date" id="date-hr">—</div>
-  <div class="panel-body">
-    <div class="metric-row">
-      <div class="metric-box"><div class="metric-label">Trainings Complete</div><div class="metric-value" id="trainings" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-      <div class="metric-box"><div class="metric-label">Headcount Total</div><div class="metric-value" id="headcount" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
+    <!-- PRODUCTION -->
+    <div class="panel" style="grid-column:span 12;position:relative;" id="panel-production">
+      <div class="panel-header"><span class="panel-title">⚙️ Production Summary</span></div>
+      <div class="panel-body">
+        <div class="prod-split">
+          <div>
+            <div class="timeframe-block tf-today"><div class="timeframe-title">Today's Operational Status</div><div class="timeframe-date" id="today-date-label">—</div></div>
+            <div class="split-row">
+              <div class="split-col"><div class="col-label">Salsa Lines</div><div class="readiness-stack" id="readiness-salsa"></div></div>
+              <div class="split-col"><div class="col-label">Layer Lines</div><div class="readiness-stack" id="readiness-layer"></div></div>
+            </div>
+          </div>
+          <div>
+            <div class="timeframe-block tf-yesterday"><div class="timeframe-title">Yesterday's Performance</div><div class="timeframe-date" id="yesterday-date-label">—</div></div>
+            <div class="metric-row">
+              <div class="metric-box"><div class="metric-label">Code Red</div><div class="metric-value" id="code-red" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
+              <div class="metric-box"><div class="metric-label">Code Yellow</div><div class="metric-value" id="code-yellow" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
+              <div style="flex:2"><div class="section-label">Top Downtime Drivers</div><div class="drivers-box alert" id="top-drivers">Scanning data…</div></div>
+            </div>
+            <div class="split-row" style="margin-top:12px;">
+              <div class="split-col"><div class="col-label">Salsa Lines</div><table class="data-table"><thead><tr><th>Line</th><th>OEE</th><th>Attainment</th><th>DT</th></tr></thead><tbody id="tbody-salsa"></tbody></table></div>
+              <div class="split-col"><div class="col-label">Layer Lines</div><table class="data-table"><thead><tr><th>Line</th><th>OEE</th><th>Attainment</th><th>DT</th></tr></thead><tbody id="tbody-layer"></tbody></table></div>
+            </div>
+          </div>
+        </div>
+        <div class="chart-wrap" style="height:195px;margin-top:12px;"><canvas id="production-chart"></canvas></div>
+      </div>
+      <div class="resizer"></div>
     </div>
-    <div class="section-label">Trainings Completion</div>
-    <div class="chart-wrap" style="height:155px;"><canvas id="hr-chart"></canvas></div>
-  </div>
-  <div class="resizer"></div>
-</div>
 
-<!-- SAP -->
-<div class="panel" style="grid-column:span 4;position:relative;">
-  <div class="panel-header"><span class="panel-title">📊 SAP</span></div>
-  <div class="panel-date" id="date-sap">—</div>
-  <div class="panel-body">
-    <div class="metric-row">
-      <div class="metric-box"><div class="metric-label">Open Process Orders</div><div class="metric-value" id="proc-orders" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-      <div class="metric-box"><div class="metric-label">Warehouse Tasks</div><div class="metric-value" id="warehouse-tasks" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
+    <!-- COSTS -->
+    <div class="panel" style="grid-column:span 4;position:relative;">
+      <div class="panel-header"><span class="panel-title">💰 Costs</span></div>
+      <div class="panel-date" id="date-costs">—</div>
+      <div class="panel-body">
+        <table class="data-table">
+          <thead><tr><th>Metric</th><th>Direct</th><th>Indirect</th></tr></thead>
+          <tbody>
+            <tr><td>Cost / Lb</td><td id="cost-direct" contenteditable="true" oninput="saveManual(this.id)">—</td><td id="cost-indirect" contenteditable="true" oninput="saveManual(this.id)">—</td></tr>
+            <tr><td>Lb / hr</td><td id="pound-hr-direct" contenteditable="true" oninput="saveManual(this.id)">—</td><td id="pound-hr-indirect" contenteditable="true" oninput="saveManual(this.id)">—</td></tr>
+            <tr><td>Proj. Conversion</td><td colspan="2" id="conversion-costs" contenteditable="true" oninput="saveManual(this.id)">—</td></tr>
+            <tr><td>Lbs Produced</td><td colspan="2" id="pounds-prod" contenteditable="true" oninput="saveManual(this.id)">—</td></tr>
+          </tbody>
+        </table>
+        <div><div class="section-label">OT Trend by Dept — Last 30 Days</div><div class="chart-wrap" style="height:185px;"><canvas id="costs-ot-chart"></canvas></div></div>
+      </div>
+      <div class="resizer"></div>
     </div>
-    <div class="chart-wrap" style="height:115px;"><canvas id="sap-orders-chart"></canvas></div>
-    <div class="chart-wrap" style="height:115px;"><canvas id="sap-teco-chart"></canvas></div>
-    <div class="chart-wrap" style="height:115px;"><canvas id="sap-cogi-chart"></canvas></div>
-  </div>
-  <div class="resizer"></div>
-</div>
 
-<!-- WAREHOUSE -->
-<div class="panel" style="grid-column:span 4;position:relative;">
-  <div class="panel-header"><span class="panel-title">🏭 Warehouse</span></div>
-  <div class="panel-date" id="date-warehouse">—</div>
-  <div class="panel-body">
-    <div class="metric-row">
-      <div class="metric-box"><div class="metric-label">Overall Fill Rate %</div><div class="metric-value" id="wh-fill" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-      <div class="metric-box"><div class="metric-label">Walmart Fill Rate %</div><div class="metric-value" id="wh-ce-fill" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
+    <!-- HR -->
+    <div class="panel" style="grid-column:span 4;position:relative;">
+      <div class="panel-header"><span class="panel-title">👥 HR | Training</span></div>
+      <div class="panel-date" id="date-hr">—</div>
+      <div class="panel-body">
+        <div class="metric-row">
+          <div class="metric-box"><div class="metric-label">Trainings Complete</div><div class="metric-value" id="trainings" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
+          <div class="metric-box"><div class="metric-label">Headcount Total</div><div class="metric-value" id="headcount" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
+        </div>
+        <div class="section-label">Trainings Completion</div>
+        <div class="chart-wrap" style="height:155px;"><canvas id="hr-chart"></canvas></div>
+      </div>
+      <div class="resizer"></div>
     </div>
-    <div class="metric-row">
-      <div class="metric-box"><div class="metric-label">Cases Scheduled</div><div class="metric-value" id="wh-scheduled" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-      <div class="metric-box"><div class="metric-label">Cases Shipped</div><div class="metric-value" id="wh-shipped" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-    </div>
-    <div class="metric-box" style="background:var(--green-xll);border-color:var(--green-ll);text-align:center;padding:10px;">
-      <div class="metric-label" style="color:var(--green-d);font-weight:800;">CPMH — Cases / Man Hour</div>
-      <div class="metric-value" id="wh-cpmh" style="color:var(--green-d);" contenteditable="true" oninput="saveManual(this.id)">—</div>
-    </div>
-    <div class="chart-wrap" style="height:115px;"><canvas id="wh-fill-chart"></canvas></div>
-    <div class="chart-wrap" style="height:115px;"><canvas id="wh-ce-chart"></canvas></div>
-    <div class="chart-wrap" style="height:195px;"><canvas id="wh-cpmh-chart"></canvas></div>
-  </div>
-  <div class="resizer"></div>
-</div>
 
-<!-- INVENTORY -->
-<div class="panel" style="grid-column:span 4;position:relative;">
-  <div class="panel-header"><span class="panel-title">📦 Inventory Control</span></div>
-  <div class="panel-date" id="date-inventory">—</div>
-  <div class="panel-body">
-    <div class="metric-row">
-      <div class="metric-box"><div class="metric-label">Buena Park Completion</div><div class="metric-value" id="inv-bp" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-      <div class="metric-box"><div class="metric-label">Cerritos Completion</div><div class="metric-value" id="inv-ce" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
+    <!-- SAP -->
+    <div class="panel" style="grid-column:span 4;position:relative;">
+      <div class="panel-header"><span class="panel-title">📊 SAP</span></div>
+      <div class="panel-date" id="date-sap">—</div>
+      <div class="panel-body">
+        <div class="metric-row">
+          <div class="metric-box"><div class="metric-label">Open Process Orders</div><div class="metric-value" id="proc-orders" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
+          <div class="metric-box"><div class="metric-label">Warehouse Tasks</div><div class="metric-value" id="warehouse-tasks" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
+        </div>
+        <div class="chart-wrap" style="height:115px;"><canvas id="sap-orders-chart"></canvas></div>
+        <div class="chart-wrap" style="height:115px;"><canvas id="sap-teco-chart"></canvas></div>
+        <div class="chart-wrap" style="height:115px;"><canvas id="sap-cogi-chart"></canvas></div>
+      </div>
+      <div class="resizer"></div>
     </div>
-    <div class="metric-row">
-      <div class="metric-box"><div class="metric-label">Critical Items</div><div class="metric-value" id="inv-critical" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-      <div class="metric-box"><div class="metric-label">Variants</div><div class="metric-value" id="inv-variants" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-      <div class="metric-box"><div class="metric-label">Bin Accuracy</div><div class="metric-value" id="inv-accuracy" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
-    </div>
-    <div><div class="section-label">Inventory Notes</div><div class="drivers-box" id="inv-notes">—</div></div>
-  </div>
-  <div class="resizer"></div>
-</div>
 
-<!-- SAP (right column) — span 4, fill remaining -->
-<div class="panel" style="grid-column:span 4;position:relative;">
-  <div class="panel-header" style="cursor:default;"><span class="panel-title">📝 Daily Plan / Gemba Walk</span>
-    <div style="display:flex;gap:8px;">
-      <button class="btn btn-ghost" onclick="clearManuals()" style="font-size:.72rem;padding:4px 10px;">↺ Clear Overrides</button>
-      <button class="btn btn-danger" onclick="clearPlan()" style="font-size:.72rem;">Reset Plan</button>
+    <!-- WAREHOUSE -->
+    <div class="panel" style="grid-column:span 4;position:relative;">
+      <div class="panel-header"><span class="panel-title">🏭 Warehouse</span></div>
+      <div class="panel-date" id="date-warehouse">—</div>
+      <div class="panel-body">
+        <div class="metric-row">
+          <div class="metric-box"><div class="metric-label">Overall Fill Rate %</div><div class="metric-value" id="wh-fill" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
+          <div class="metric-box"><div class="metric-label">Walmart Fill Rate %</div><div class="metric-value" id="wh-ce-fill" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
+        </div>
+        <div class="metric-row">
+          <div class="metric-box"><div class="metric-label">Cases Scheduled</div><div class="metric-value" id="wh-scheduled" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
+          <div class="metric-box"><div class="metric-label">Cases Shipped</div><div class="metric-value" id="wh-shipped" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
+        </div>
+        <div class="metric-box" style="background:var(--green-xll);border-color:var(--green-ll);text-align:center;padding:10px;">
+          <div class="metric-label" style="color:var(--green-d);font-weight:800;">CPMH — Cases / Man Hour</div>
+          <div class="metric-value" id="wh-cpmh" style="color:var(--green-d);" contenteditable="true" oninput="saveManual(this.id)">—</div>
+        </div>
+        <div class="chart-wrap" style="height:115px;"><canvas id="wh-fill-chart"></canvas></div>
+        <div class="chart-wrap" style="height:115px;"><canvas id="wh-ce-chart"></canvas></div>
+        <div class="chart-wrap" style="height:195px;"><canvas id="wh-cpmh-chart"></canvas></div>
+      </div>
+      <div class="resizer"></div>
     </div>
-  </div>
-  <div class="panel-body">
-    <div class="plan-body" id="plan-body" contenteditable="true" oninput="localStorage.setItem('dds_plan',this.innerText)">—</div>
-  </div>
-</div>
-```
+
+    <!-- INVENTORY -->
+    <div class="panel" style="grid-column:span 4;position:relative;">
+      <div class="panel-header"><span class="panel-title">📦 Inventory Control</span></div>
+      <div class="panel-date" id="date-inventory">—</div>
+      <div class="panel-body">
+        <div class="metric-row">
+          <div class="metric-box"><div class="metric-label">Buena Park Completion</div><div class="metric-value" id="inv-bp" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
+          <div class="metric-box"><div class="metric-label">Cerritos Completion</div><div class="metric-value" id="inv-ce" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
+        </div>
+        <div class="metric-row">
+          <div class="metric-box"><div class="metric-label">Critical Items</div><div class="metric-value" id="inv-critical" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
+          <div class="metric-box"><div class="metric-label">Variants</div><div class="metric-value" id="inv-variants" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
+          <div class="metric-box"><div class="metric-label">Bin Accuracy</div><div class="metric-value" id="inv-accuracy" contenteditable="true" oninput="saveManual(this.id)">—</div></div>
+        </div>
+        <div><div class="section-label">Inventory Notes</div><div class="drivers-box" id="inv-notes">—</div></div>
+      </div>
+      <div class="resizer"></div>
+    </div>
+
+    <!-- SAP (right column) — span 4, fill remaining -->
+    <div class="panel" style="grid-column:span 4;position:relative;">
+      <div class="panel-header" style="cursor:default;"><span class="panel-title">📝 Daily Plan / Gemba Walk</span>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-ghost" onclick="clearManuals()" style="font-size:.72rem;padding:4px 10px;">↺ Clear Overrides</button>
+          <button class="btn btn-danger" onclick="clearPlan()" style="font-size:.72rem;">Reset Plan</button>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div class="plan-body" id="plan-body" contenteditable="true" oninput="localStorage.setItem('dds_plan',this.innerText)">—</div>
+      </div>
+    </div>
 
   </div>
 </div>
@@ -360,7 +352,9 @@ function mkChart(id,type,labels,datasets,extra={}){const el=document.getElementB
 function mkDoughnut(id,value,label){const el=document.getElementById(id);if(!el)return;let n=parseFloat(value)||0;if(n>0&&n<=2)n*=100;const color=n>=90?'#059669':n>=70?'#b45309':'#ef4444';const short=label.includes('Overall')?'Overall':label.includes('Walmart')?'Walmart':label;const ex=Chart.getChart(el);if(ex)ex.destroy();new Chart(el.getContext('2d'),{type:'doughnut',data:{datasets:[{data:[n,100-n],backgroundColor:[color,'#dde4e0'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,cutout:'76%',animation:{duration:300},plugins:{legend:{display:false}}},plugins:[{id:'center',beforeDraw:chart=>{const{width,height,ctx}=chart;ctx.restore();ctx.textAlign='center';ctx.textBaseline='middle';ctx.font=`600 10px 'DM Sans'`;ctx.fillStyle='#5a7468';ctx.fillText(short,width/2,height/2-12);ctx.font=`bold 18px 'DM Sans'`;ctx.fillStyle=color;ctx.fillText(`${n.toFixed(1)}%`,width/2,height/2+8);ctx.save();}}]});}
 
 // ── Render ──
-function sheet(name){const s=workbook.Sheets[name];return s?XLSX.utils.sheet_to_json(s,{defval:'',raw:true,blankrows:false}):[];}
+// workbook is now a plain JSON object { SheetName: [...rows] } from GAS
+// (same shape as XLSX.utils.sheet_to_json output — all parsing logic unchanged)
+function sheet(name){return workbook[name]||[];}
 
 function renderDashboard(){
   if(!workbook)return;
@@ -451,36 +445,57 @@ function clearPlan(){if(!confirm('Reset the daily plan?'))return;localStorage.re
 function updateClock(){const el=document.getElementById('ctrl-clock');if(el)el.textContent=new Date().toLocaleTimeString();}
 function toggleAutoRefresh(){autoRefreshOn=!autoRefreshOn;document.getElementById('auto-toggle').classList.toggle('on',autoRefreshOn);if(autoRefreshOn)scheduleRefresh();else{clearTimeout(autoRefreshTimer);autoRefreshTimer=null;}}
 function updateInterval(){if(autoRefreshOn){clearTimeout(autoRefreshTimer);scheduleRefresh();}}
-function scheduleRefresh(){const mins=parseInt(document.getElementById('interval-sel').value,10);autoRefreshTimer=setTimeout(()=>{if(autoRefreshOn){fetchFromSharePoint();scheduleRefresh();}},mins*60*1000);}
+function scheduleRefresh(){const mins=parseInt(document.getElementById('interval-sel').value,10);autoRefreshTimer=setTimeout(()=>{if(autoRefreshOn){fetchFromGAS();scheduleRefresh();}},mins*60*1000);}
 
-// ── Data loading ──
-function applyBuffer(buf,name){
-  workbook=XLSX.read(buf,{type:'array',cellDates:false,raw:true});
+// ── Data loading (GAS path) ──
+/**
+ * sheet() reads from the GAS JSON workbook.
+ * workbook = { 'SheetName': [{col:val,...}, ...] }
+ */
+function sheet(name){return workbook[name]||[];}
+
+function applyData(data,sourceName){
+  workbook=data;
   renderDashboard();
   if(window.Sortable)initDraggable();initResizable();
-  const st=document.getElementById('data-status');st.className='ok';st.textContent='✓ '+(name||'workbook');
+  const st=document.getElementById('data-status');st.className='ok';st.textContent='✓ '+(sourceName||'GAS');
 }
 
 function setSpBar(msg,state='',spin=false){const bar=document.getElementById('sp-bar'),sp=document.getElementById('sp-spinner'),msgEl=document.getElementById('sp-msg');bar.className='sp-bar visible'+(state?' '+state:'');msgEl.textContent=msg;sp.classList.toggle('on',spin);}
 
-async function fetchFromSharePoint(){
-  const btn=document.getElementById('btn-sp'),st=document.getElementById('data-status');
-  btn.disabled=true;setSpBar('Connecting to SharePoint…','',true);st.className='loading';st.textContent='Loading…';
+async function fetchFromGAS(){
+  const btn=document.getElementById('btn-gas'),st=document.getElementById('data-status');
+  btn.disabled=true;setSpBar('Fetching from Google Sheets…','',true);st.className='loading';st.textContent='Loading…';
+  NovusGAS.clearCache();
   try{
-    const buf=await NovusSP.fetchWorkbook();setSpBar('Parsing workbook…','',true);applyBuffer(buf,'all_department_data_2026.xlsx');
-    const bytes=new Uint8Array(buf);let b='';for(let i=0;i<bytes.byteLength;i++)b+=String.fromCharCode(bytes[i]);
-    try{sessionStorage.setItem('novus1730_wb',btoa(b));sessionStorage.setItem('novus1730_wb_name','all_department_data_2026.xlsx');}catch(_){}
-    const name=await NovusSP.getDisplayName();document.getElementById('sp-time').textContent=`Fetched at ${new Date().toLocaleTimeString()}`;
-    setSpBar(`✓ Live data loaded${name?' by '+name:''}`, 'success',false);NovusCore.Toast.success('Dashboard updated ✓');
-  }catch(err){console.error(err);setSpBar(`⚠ ${err.message}`,'error',false);st.className='error';st.textContent='⚠ Error';NovusCore.Toast.error('SharePoint fetch failed.');}
-  finally{btn.disabled=false;}
+    const data=await NovusGAS.fetchData();
+    applyData(data,'Google Sheets');
+    document.getElementById('sp-time').textContent=`Fetched at ${new Date().toLocaleTimeString()}`;
+    setSpBar('✓ Live data from Google Sheets','success',false);
+    NovusCore.Toast.success('Dashboard updated ✓');
+  }catch(err){
+    console.error(err);
+    setSpBar(`⚠ ${err.message} — try uploading Excel as fallback`,'error',false);
+    st.className='error';st.textContent='⚠ Error';
+    NovusCore.Toast.error('GAS fetch failed. Check gas-config.js URL.');
+  }finally{btn.disabled=false;}
 }
 
+// ── Manual XLSX upload (fallback when GAS unavailable) ──
 async function handleUpload(evt){
   const file=evt.target.files[0];if(!file)return;
+  if(typeof XLSX==='undefined'){NovusCore.Toast.error('XLSX library still loading, wait a moment.');return;}
   const st=document.getElementById('data-status');st.className='';st.textContent='Reading…';
-  try{const buf=await NovusCore.WorkbookCache.save(file);applyBuffer(buf,file.name);setSpBar(`✓ Loaded from upload: ${file.name}`,'success',false);NovusCore.Toast.success('Workbook loaded ✓');}
-  catch(err){st.className='error';st.textContent='⚠ '+err.message;NovusCore.Toast.error('Failed to read file.');}
+  try{
+    const buf=await new Promise((res,rej)=>{const r=new FileReader();r.onload=e=>res(e.target.result);r.onerror=rej;r.readAsArrayBuffer(file);});
+    const wb=XLSX.read(buf,{type:'array',cellDates:false,raw:true});
+    // Convert XLSX to the same JSON shape GAS produces
+    const data={};
+    wb.SheetNames.forEach(n=>{const s=wb.Sheets[n];data[n]=s?XLSX.utils.sheet_to_json(s,{defval:'',raw:true,blankrows:false}):[];});
+    applyData(data,file.name);
+    setSpBar(`✓ Loaded from upload: ${file.name}`,'success',false);
+    NovusCore.Toast.success('Workbook loaded ✓');
+  }catch(err){st.className='error';st.textContent='⚠ '+err.message;NovusCore.Toast.error('Failed to read file.');}
 }
 
 function initDraggable(){new Sortable(document.getElementById('main-sortable'),{animation:220,handle:'.panel-header',ghostClass:'sortable-ghost'});}
@@ -490,12 +505,17 @@ window.__libsCallback=async()=>{
   NovusCore.requireAuth();
   const plan=localStorage.getItem('dds_plan');if(plan)document.getElementById('plan-body').innerText=plan;
   updateClock();setInterval(updateClock,1000);
-  const cached=NovusCore.WorkbookCache.load();
-  if(cached){applyBuffer(cached);setSpBar('✓ Restored from session cache — click "Load from SharePoint" to refresh','success',false);return;}
-  fetchFromSharePoint();
+  // Try session cache first (instant restore when navigating back between pages)
+  const cached=NovusGAS.loadFromCache();
+  if(cached){
+    applyData(cached,'Google Sheets (cache)');
+    const t=NovusGAS.getLastFetchTime();
+    setSpBar(`✓ Session cache — last fetched ${t||'earlier'}. Click "Refresh Data" to update.`,'success',false);
+    return;
+  }
+  fetchFromGAS();
 };
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{if(window.__libs.chartjs&&window.__libs.xlsx)window.__libsCallback();});
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{if(window.__libs.chartjs)window.__libsCallback();});
 </script>
-
 </body>
 </html>
