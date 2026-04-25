@@ -539,25 +539,7 @@ function toggleAutoRefresh(){autoRefreshOn=!autoRefreshOn;document.getElementByI
 function updateInterval(){if(autoRefreshOn){clearTimeout(autoRefreshTimer);scheduleRefresh();}}
 function scheduleRefresh(){const mins=parseInt(document.getElementById('interval-sel').value,10);autoRefreshTimer=setTimeout(()=>{if(autoRefreshOn){fetchFromSharePoint();scheduleRefresh();}},mins*60*1000);}
 
-// ══ MORE DROPDOWN ════════════════════════════════════════════════════════
-function toggleMore(e){
-  e.stopPropagation();
-  const dd=document.getElementById('more-dropdown');
-  const btn=document.getElementById('btn-more');
-  const willOpen=dd.classList.contains('hidden');
-  dd.classList.toggle('hidden');
-  btn.classList.toggle('active',willOpen);
-}
-function closeMore(){
-  const dd=document.getElementById('more-dropdown');
-  const btn=document.getElementById('btn-more');
-  if(dd)dd.classList.add('hidden');
-  if(btn)btn.classList.remove('active');
-}
-document.addEventListener('click',e=>{
-  const wrap=document.getElementById('more-wrap');
-  if(wrap&&!wrap.contains(e.target))closeMore();
-});
+// toggleMore/closeMore defined in novus-core.js
 
 // ══ FRESHNESS BADGE ══════════════════════════════════════════════════════
 function updateFreshnessBadge(){
