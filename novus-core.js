@@ -236,7 +236,29 @@ load() {
   }
 
 // ── Public API ─────────────────────────────────────────────────────────────
-// ── Core Values Overlay ───────────────────────────────────────────────────
+// ── More (···) dropdown — shared across all pages ────────────────────────
+// Defined here so every page gets it just by loading novus-core.js.
+window.toggleMore = function(e) {
+e.stopPropagation();
+const dd  = document.getElementById(‘more-dropdown’);
+const btn = document.getElementById(‘btn-more’);
+if (!dd) return;
+const willOpen = dd.classList.contains(‘hidden’);
+dd.classList.toggle(‘hidden’);
+if (btn) btn.classList.toggle(‘active’, willOpen);
+};
+
+window.closeMore = function() {
+const dd  = document.getElementById(‘more-dropdown’);
+const btn = document.getElementById(‘btn-more’);
+if (dd)  dd.classList.add(‘hidden’);
+if (btn) btn.classList.remove(‘active’);
+};
+
+document.addEventListener(‘click’, function(e) {
+const wrap = document.getElementById(‘more-wrap’);
+if (wrap && !wrap.contains(e.target)) window.closeMore();
+});
 const VALUES = [
 { name: ‘1. Do the Right Thing’,            desc: ‘Safety and quality always. Respect is nonnegotiable. Speak your truth.’ },
 { name: ‘2. Our People Are Extraordinary’,  desc: ‘Passion, perseverance and humility (grit). Lead from any seat. Invest in yourself and others.’ },
