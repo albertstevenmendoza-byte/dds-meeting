@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
@@ -7,15 +6,14 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="novus-styles.css">
-  <script src="https://alcdn.msauth.net/browser/2.38.3/js/msal-browser.min.js"></script>
-  <script src="sharepoint-config.js"></script>
+  <script src="gas-config.js"></script>
   <script src="novus-core.js"></script>
   <script>
     window.__libs={chartjs:false,xlsx:false};
-    function _checkLibsReady(){if(window.__libs.chartjs&&window.__libs.xlsx&&window.__libsCallback)window.__libsCallback();}
+    function _checkLibsReady(){if(window.__libs.chartjs&&window.__libsCallback)window.__libsCallback();}
   </script>
   <script async src="https://cdn.jsdelivr.net/npm/chart.js" onload="window.__libs.chartjs=true;_checkLibsReady()"></script>
-  <script async src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js" onload="window.__libs.xlsx=true;_checkLibsReady()"></script>
+  <script async src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js" onload="window.__libs.xlsx=true"></script>
   <style>
     /* ── Builder panel ── */
     .builder {
@@ -48,101 +46,97 @@
     #data-status.error { color: var(--red); }
     #data-status.loading { color: var(--amber-l); }
 
-```
-/* ── Saved layouts ── */
-.layouts-row {
-  display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
-  padding: 10px 18px;
-  background: var(--surface2);
-  border-top: 1px solid var(--border);
-}
-.layouts-label { font-size:.7rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--ink3); }
-.layout-chip {
-  font-size: .72rem; font-weight: 700;
-  padding: 4px 12px; border-radius: 6px;
-  background: var(--green-xll); color: var(--green-d);
-  border: 1px solid var(--green-ll);
-  cursor: pointer; transition: .15s;
-}
-.layout-chip:hover { background: var(--green-ll); }
-.layout-chip.active { background: var(--green-d); color: white; border-color: var(--green-d); }
+    /* ── Saved layouts ── */
+    .layouts-row {
+      display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+      padding: 10px 18px;
+      background: var(--surface2);
+      border-top: 1px solid var(--border);
+    }
+    .layouts-label { font-size:.7rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--ink3); }
+    .layout-chip {
+      font-size: .72rem; font-weight: 700;
+      padding: 4px 12px; border-radius: 6px;
+      background: var(--green-xll); color: var(--green-d);
+      border: 1px solid var(--green-ll);
+      cursor: pointer; transition: .15s;
+    }
+    .layout-chip:hover { background: var(--green-ll); }
+    .layout-chip.active { background: var(--green-d); color: white; border-color: var(--green-d); }
 
-/* ── Widget group ── */
-.group {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  margin-bottom: 24px;
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
-  animation: fadeUp .28s var(--ease-out) both;
-}
-.group-header {
-  background: linear-gradient(135deg, var(--green-xll), var(--green-ll));
-  border-bottom: 1.5px solid #a7f3d0;
-  padding: 11px 18px;
-  display: flex; justify-content: space-between; align-items: center;
-}
-.group-title { color: var(--green-d); font-weight: 800; font-size: .9rem; }
-.group-widgets {
-  display: grid;
-  grid-template-columns: repeat(var(--cols,4),1fr);
-  gap: 16px; padding: 16px;
-}
-@media(max-width:860px){.group-widgets{grid-template-columns:repeat(2,1fr)!important}}
-@media(max-width:560px){.group-widgets{grid-template-columns:1fr!important}}
+    /* ── Widget group ── */
+    .group {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 24px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      animation: fadeUp .28s var(--ease-out) both;
+    }
+    .group-header {
+      background: linear-gradient(135deg, var(--green-xll), var(--green-ll));
+      border-bottom: 1.5px solid #a7f3d0;
+      padding: 11px 18px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .group-title { color: var(--green-d); font-weight: 800; font-size: .9rem; }
+    .group-widgets {
+      display: grid;
+      grid-template-columns: repeat(var(--cols,4),1fr);
+      gap: 16px; padding: 16px;
+    }
+    @media(max-width:860px){.group-widgets{grid-template-columns:repeat(2,1fr)!important}}
+    @media(max-width:560px){.group-widgets{grid-template-columns:1fr!important}}
 
-/* ── Widget card ── */
-.widget {
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 14px;
-  display: flex; flex-direction: column; gap: 10px; min-height: 300px;
-  animation: fadeUp .22s var(--ease-out) both;
-  transition: box-shadow .2s, border-color .2s;
-}
-.widget:hover { box-shadow: var(--shadow); border-color: var(--green-ll); }
-.widget-head { display:flex; justify-content:space-between; align-items:flex-start; gap:8px; padding-bottom:10px; border-bottom:1px solid var(--border); }
-.widget-title { font-size:.88rem; font-weight:700; color:var(--ink); letter-spacing:-.01em; line-height:1.3; }
-.btn-remove { background:none; border:none; color:var(--ink4); font-size:1.1rem; line-height:1; cursor:pointer; padding:2px 4px; border-radius:4px; flex-shrink:0; transition:.12s; }
-.btn-remove:hover { color:var(--red-l); background:#fef2f2; }
+    /* ── Widget card ── */
+    .widget {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      display: flex; flex-direction: column; gap: 10px; min-height: 300px;
+      animation: fadeUp .22s var(--ease-out) both;
+      transition: box-shadow .2s, border-color .2s;
+    }
+    .widget:hover { box-shadow: var(--shadow); border-color: var(--green-ll); }
+    .widget-head { display:flex; justify-content:space-between; align-items:flex-start; gap:8px; padding-bottom:10px; border-bottom:1px solid var(--border); }
+    .widget-title { font-size:.88rem; font-weight:700; color:var(--ink); letter-spacing:-.01em; line-height:1.3; }
+    .btn-remove { background:none; border:none; color:var(--ink4); font-size:1.1rem; line-height:1; cursor:pointer; padding:2px 4px; border-radius:4px; flex-shrink:0; transition:.12s; }
+    .btn-remove:hover { color:var(--red-l); background:#fef2f2; }
 
-/* Agg badges */
-.agg-badge { display:inline-flex; align-items:center; gap:4px; font-size:.62rem; font-weight:700; font-family:'DM Mono',monospace; text-transform:uppercase; letter-spacing:.04em; padding:2px 7px; border-radius:4px; margin-top:3px; }
-.agg-badge::before { content:''; width:5px; height:5px; border-radius:50%; background:currentColor; opacity:.7; }
-.badge-sum  { background: var(--green-xll); color: var(--green-d); }
-.badge-wavg { background: var(--teal-ll);   color: var(--teal); }
-.badge-avg  { background: #f3e8ff;           color: #7c3aed; }
+    /* Agg badges */
+    .agg-badge { display:inline-flex; align-items:center; gap:4px; font-size:.62rem; font-weight:700; font-family:'DM Mono',monospace; text-transform:uppercase; letter-spacing:.04em; padding:2px 7px; border-radius:4px; margin-top:3px; }
+    .agg-badge::before { content:''; width:5px; height:5px; border-radius:50%; background:currentColor; opacity:.7; }
+    .badge-sum  { background: var(--green-xll); color: var(--green-d); }
+    .badge-wavg { background: var(--teal-ll);   color: var(--teal); }
+    .badge-avg  { background: #f3e8ff;           color: #7c3aed; }
 
-/* Metric card */
-.metric-big { font-size:2.8rem; font-weight:700; letter-spacing:-.04em; text-align:center; padding:18px 0 6px; line-height:1; }
-.metric-sub-sm { text-align:center; font-size:.7rem; font-family:'DM Mono',monospace; color:var(--ink3); padding-bottom:10px; }
+    /* Metric card */
+    .metric-big { font-size:2.8rem; font-weight:700; letter-spacing:-.04em; text-align:center; padding:18px 0 6px; line-height:1; }
+    .metric-sub-sm { text-align:center; font-size:.7rem; font-family:'DM Mono',monospace; color:var(--ink3); padding-bottom:10px; }
 
-/* Chart wrap inside widget */
-.widget-chart-wrap { position:relative; flex:1; min-height:200px; width:100%; }
+    /* Chart wrap inside widget */
+    .widget-chart-wrap { position:relative; flex:1; min-height:200px; width:100%; }
 
-/* Empty state */
-.empty-state-page { text-align:center; padding:72px 24px; color:var(--ink3); }
-.empty-icon { font-size:2.8rem; margin-bottom:14px; opacity:.35; }
-.empty-state-page h3 { font-size:1.05rem; color:var(--ink2); font-weight:700; margin-bottom:8px; }
-.empty-state-page p  { font-size:.84rem; line-height:1.7; max-width:400px; margin:0 auto; }
+    /* Empty state */
+    .empty-state-page { text-align:center; padding:72px 24px; color:var(--ink3); }
+    .empty-icon { font-size:2.8rem; margin-bottom:14px; opacity:.35; }
+    .empty-state-page h3 { font-size:1.05rem; color:var(--ink2); font-weight:700; margin-bottom:8px; }
+    .empty-state-page p  { font-size:.84rem; line-height:1.7; max-width:400px; margin:0 auto; }
 
-/* Skeleton */
-.skeleton-group { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:14px; margin-bottom:24px; }
-.skeleton-hdr   { height:44px; border-radius:calc(var(--radius) - 2px) calc(var(--radius) - 2px) 0 0; margin:-14px -14px 16px; }
-.skeleton-cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:16px; }
-.skeleton-card  { height:300px; border-radius:var(--radius-sm); }
-@keyframes shimmer{0%{background-position:-600px 0}100%{background-position:600px 0}}
-.skel { border-radius:var(--radius); background:linear-gradient(90deg,#e6ece9 25%,#eff4f1 50%,#e6ece9 75%); background-size:600px 100%; animation:shimmer 1.4s infinite linear; }
-```
-
+    /* Skeleton */
+    .skeleton-group { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:14px; margin-bottom:24px; }
+    .skeleton-hdr   { height:44px; border-radius:calc(var(--radius) - 2px) calc(var(--radius) - 2px) 0 0; margin:-14px -14px 16px; }
+    .skeleton-cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:16px; }
+    .skeleton-card  { height:300px; border-radius:var(--radius-sm); }
+    @keyframes shimmer{0%{background-position:-600px 0}100%{background-position:600px 0}}
+    .skel { border-radius:var(--radius); background:linear-gradient(90deg,#e6ece9 25%,#eff4f1 50%,#e6ece9 75%); background-size:600px 100%; animation:shimmer 1.4s infinite linear; }
   </style>
 </head>
 <body>
 
 <!-- Nav -->
-
 <div class="top-nav">
   <div class="logo"><div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M3 3h7v7H3zm0 11h7v7H3zm11-11h7v7h-7zm0 11h7v7h-7z"/></svg></div><span class="logo-text">Novus <span>Foods</span> Ops</span></div>
   <nav class="nav-tabs">
@@ -156,19 +150,18 @@
   </nav>
   <div style="display:flex;gap:8px;align-items:center;">
     <span id="data-status">—</span>
-    <button class="btn btn-ms" id="btn-sp" onclick="fetchFromSharePoint()">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-      Load from SharePoint
+    <button class="btn btn-primary" id="btn-gas" onclick="fetchFromGAS()" style="font-size:.78rem;padding:7px 14px;">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.08-5.96"/></svg>
+      Refresh Data
     </button>
-    <label class="btn btn-ghost" style="cursor:pointer;font-size:.75rem;padding:6px 12px;">⬆ Upload<input type="file" id="file-upload" accept=".xlsx,.xls" style="display:none" onchange="handleUpload(event)"></label>
+    <label class="btn btn-ghost" style="cursor:pointer;font-size:.75rem;padding:6px 12px;" title="Upload Excel as fallback">⬆ Upload XLSX<input type="file" id="file-upload" accept=".xlsx,.xls" style="display:none" onchange="handleUpload(event)"></label>
     <button class="btn btn-danger" style="font-size:.75rem;padding:6px 12px;" onclick="NovusCore.navigateTo('index.html')">Logout</button>
   </div>
 </div>
 
-<!-- SP bar -->
-
+<!-- Status bar -->
 <div class="sp-bar" id="sp-bar">
-  <div class="sp-bar-left"><div class="sp-spinner" id="sp-spinner"></div><span id="sp-msg">Connecting…</span></div>
+  <div class="sp-bar-left"><div class="sp-spinner" id="sp-spinner"></div><span id="sp-msg">Connecting to Google Sheets…</span></div>
   <span style="font-size:.68rem;opacity:.85;font-family:'DM Mono',monospace;" id="sp-time"></span>
 </div>
 
@@ -234,7 +227,6 @@
   </div>
 
   <!-- Widget output -->
-
   <div id="output"></div>
 </div>
 
@@ -278,40 +270,59 @@ function aggKey(d,mode){if(!d)return null;const y=d.getUTCFullYear(),mo=d.getUTC
 // ════════════════════════════════════════════════════════════════════════════
 //  DATA LOAD
 // ════════════════════════════════════════════════════════════════════════════
-function applyBuffer(buf,name){
-  const wb=XLSX.read(buf,{type:'array',cellDates:false});
+// ════════════════════════════════════════════════════════════════════════════
+//  DATA LOAD  (GAS JSON path)
+// ════════════════════════════════════════════════════════════════════════════
+
+function applyData(sheetData, sourceName){
   deptData={};
-  wb.SheetNames.forEach(n=>{const rows=XLSX.utils.sheet_to_json(wb.Sheets[n],{defval:null});rows.forEach(r=>{r._jsDate=excelToUTC(r.Date);});deptData[n]=rows;});
+  Object.entries(sheetData).forEach(([name,rows])=>{
+    // Attach parsed _jsDate to each row (same as the old XLSX path)
+    deptData[name]=(rows||[]).map(r=>({...r, _jsDate:excelToUTC(r.Date)}));
+  });
   const keys=Object.keys(deptData);
   const st=document.getElementById('data-status');
   st.className=keys.length?'ok':'error';
   st.textContent=keys.length?`✓ ${keys.length} sheets`:'⚠ No sheets found';
-  onDeptChange();render();
+  onDeptChange(); render();
 }
 
 async function handleUpload(evt){
   const file=evt.target.files[0];if(!file)return;
+  if(typeof XLSX==='undefined'){NovusCore.Toast.error('XLSX library still loading.');return;}
   const st=document.getElementById('data-status');st.className='';st.textContent='Reading…';
-  try{const buf=await NovusCore.WorkbookCache.save(file);applyBuffer(buf,file.name);setSpBar(`✓ Loaded from upload: ${file.name}`,'success',false);NovusCore.Toast.success('Workbook loaded ✓');}
-  catch(e){st.className='error';st.textContent='⚠ '+e.message;NovusCore.Toast.error('Failed to read file.');}
+  try{
+    const buf=await new Promise((res,rej)=>{const r=new FileReader();r.onload=e=>res(e.target.result);r.onerror=rej;r.readAsArrayBuffer(file);});
+    const wb=XLSX.read(buf,{type:'array',cellDates:false});
+    const sheetData={};
+    wb.SheetNames.forEach(n=>{const s=wb.Sheets[n];sheetData[n]=s?XLSX.utils.sheet_to_json(s,{defval:null}):[];});
+    applyData(sheetData,file.name);
+    setSpBar(`✓ Loaded from upload: ${file.name}`,'success',false);
+    NovusCore.Toast.success('Workbook loaded ✓');
+  }catch(e){st.className='error';st.textContent='⚠ '+e.message;NovusCore.Toast.error('Failed to read file.');}
 }
 
 // ════════════════════════════════════════════════════════════════════════════
-//  SHAREPOINT
+//  GAS FETCH
 // ════════════════════════════════════════════════════════════════════════════
 function setSpBar(msg,state='',spin=false){const bar=document.getElementById('sp-bar'),sp=document.getElementById('sp-spinner'),msgEl=document.getElementById('sp-msg');bar.className='sp-bar visible'+(state?' '+state:'');msgEl.textContent=msg;sp.classList.toggle('on',spin);}
 
-async function fetchFromSharePoint(){
-  const btn=document.getElementById('btn-sp'),st=document.getElementById('data-status');
-  btn.disabled=true;setSpBar('Connecting to SharePoint…','',true);st.className='loading';st.textContent='Loading…';
+async function fetchFromGAS(){
+  const btn=document.getElementById('btn-gas'),st=document.getElementById('data-status');
+  btn.disabled=true;setSpBar('Fetching from Google Sheets…','',true);st.className='loading';st.textContent='Loading…';
+  NovusGAS.clearCache();
   try{
-    const buf=await NovusSP.fetchWorkbook();setSpBar('Parsing workbook…','',true);applyBuffer(buf,'all_department_data_2026.xlsx');
-    const bytes=new Uint8Array(buf);let b='';for(let i=0;i<bytes.byteLength;i++)b+=String.fromCharCode(bytes[i]);
-    try{sessionStorage.setItem('novus1730_wb',btoa(b));sessionStorage.setItem('novus1730_wb_name','all_department_data_2026.xlsx');}catch(_){}
-    const name=await NovusSP.getDisplayName();document.getElementById('sp-time').textContent=`Fetched at ${new Date().toLocaleTimeString()}`;
-    setSpBar(`✓ Live data loaded${name?' by '+name:''}`, 'success',false);NovusCore.Toast.success('Dashboard updated ✓');
-  }catch(err){console.error(err);setSpBar(`⚠ ${err.message}`,'error',false);st.className='error';st.textContent='⚠ Error';NovusCore.Toast.error('SharePoint fetch failed.');}
-  finally{btn.disabled=false;}
+    const data=await NovusGAS.fetchData();
+    applyData(data,'Google Sheets');
+    document.getElementById('sp-time').textContent=`Fetched at ${new Date().toLocaleTimeString()}`;
+    setSpBar('✓ Live data from Google Sheets','success',false);
+    NovusCore.Toast.success('Dashboard updated ✓');
+  }catch(err){
+    console.error(err);
+    setSpBar(`⚠ ${err.message} — try uploading Excel as fallback`,'error',false);
+    st.className='error';st.textContent='⚠ Error';
+    NovusCore.Toast.error('GAS fetch failed. Check gas-config.js URL.');
+  }finally{btn.disabled=false;}
 }
 
 // ════════════════════════════════════════════════════════════════════════════
@@ -447,12 +458,17 @@ document.addEventListener('DOMContentLoaded',()=>{
 window.__libsCallback=async()=>{
   NovusCore.requireAuth();
   try{const saved=localStorage.getItem(STORAGE_KEY);if(saved){groups=JSON.parse(saved);groups.forEach(g=>{g.id=uid++;g.widgets.forEach(w=>{w.id=uid++;});});}}catch(_){groups=[];}
-  const cached=NovusCore.WorkbookCache.load();
-  if(cached){applyBuffer(cached);setSpBar('✓ Restored from session cache — click "Load from SharePoint" to refresh','success',false);return;}
-  fetchFromSharePoint();
+  // Try session cache first (instant restore when navigating back)
+  const cached=NovusGAS.loadFromCache();
+  if(cached){
+    applyData(cached,'Google Sheets (cache)');
+    const t=NovusGAS.getLastFetchTime();
+    setSpBar(`✓ Session cache — last fetched ${t||'earlier'}. Click "Refresh Data" to update.`,'success',false);
+    return;
+  }
+  fetchFromGAS();
 };
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{if(window.__libs.chartjs&&window.__libs.xlsx)window.__libsCallback();});
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{if(window.__libs.chartjs)window.__libsCallback();});
 </script>
-
 </body>
 </html>
