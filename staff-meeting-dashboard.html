@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
@@ -49,98 +50,103 @@
     #data-status.error { color: var(--red); }
     #data-status.loading { color: var(--amber-l); }
 
-    /* ── Saved layouts ── */
-    .layouts-row {
-      display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
-      padding: 10px 18px;
-      background: var(--surface2);
-      border-top: 1px solid var(--border);
-    }
-    .layouts-label { font-size:.7rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--ink3); }
-    .layout-chip {
-      font-size: .72rem; font-weight: 700;
-      padding: 4px 12px; border-radius: 6px;
-      background: var(--green-xll); color: var(--green-d);
-      border: 1px solid var(--green-ll);
-      cursor: pointer; transition: .15s;
-    }
-    .layout-chip:hover { background: var(--green-ll); }
-    .layout-chip.active { background: var(--green-d); color: white; border-color: var(--green-d); }
+```
+/* ── Saved layouts ── */
+.layouts-row {
+  display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+  padding: 10px 18px;
+  background: var(--surface2);
+  border-top: 1px solid var(--border);
+}
+.layouts-label { font-size:.7rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--ink3); }
+.layout-chip {
+  font-size: .72rem; font-weight: 700;
+  padding: 4px 12px; border-radius: 6px;
+  background: var(--green-xll); color: var(--green-d);
+  border: 1px solid var(--green-ll);
+  cursor: pointer; transition: .15s;
+}
+.layout-chip:hover { background: var(--green-ll); }
+.layout-chip.active { background: var(--green-d); color: white; border-color: var(--green-d); }
 
-    /* ── Widget group ── */
-    .group {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      margin-bottom: 24px;
-      overflow: hidden;
-      box-shadow: var(--shadow-sm);
-      animation: fadeUp .28s var(--ease-out) both;
-    }
-    .group-header {
-      background: linear-gradient(135deg, var(--green-xll), var(--green-ll));
-      border-bottom: 1.5px solid #a7f3d0;
-      padding: 11px 18px;
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    .group-title { color: var(--green-d); font-weight: 800; font-size: .9rem; }
-    .group-widgets {
-      display: grid;
-      grid-template-columns: repeat(var(--cols,4),1fr);
-      gap: 16px; padding: 16px;
-    }
-    @media(max-width:860px){.group-widgets{grid-template-columns:repeat(2,1fr)!important}}
-    @media(max-width:560px){.group-widgets{grid-template-columns:1fr!important}}
+/* ── Widget group ── */
+.group {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 24px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  animation: fadeUp .28s var(--ease-out) both;
+}
+.group-header {
+  background: linear-gradient(135deg, var(--green-xll), var(--green-ll));
+  border-bottom: 1.5px solid #a7f3d0;
+  padding: 11px 18px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.group-title { color: var(--green-d); font-weight: 800; font-size: .9rem; }
+.group-widgets {
+  display: grid;
+  grid-template-columns: repeat(var(--cols,4),1fr);
+  gap: 16px; padding: 16px;
+}
+@media(max-width:860px){.group-widgets{grid-template-columns:repeat(2,1fr)!important}}
+@media(max-width:560px){.group-widgets{grid-template-columns:1fr!important}}
 
-    /* ── Widget card ── */
-    .widget {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 14px;
-      display: flex; flex-direction: column; gap: 10px; min-height: 300px;
-      animation: fadeUp .22s var(--ease-out) both;
-      transition: box-shadow .2s, border-color .2s;
-    }
-    .widget:hover { box-shadow: var(--shadow); border-color: var(--green-ll); }
-    .widget-head { display:flex; justify-content:space-between; align-items:flex-start; gap:8px; padding-bottom:10px; border-bottom:1px solid var(--border); }
-    .widget-title { font-size:.88rem; font-weight:700; color:var(--ink); letter-spacing:-.01em; line-height:1.3; }
-    .btn-remove { background:none; border:none; color:var(--ink4); font-size:1.1rem; line-height:1; cursor:pointer; padding:2px 4px; border-radius:4px; flex-shrink:0; transition:.12s; }
-    .btn-remove:hover { color:var(--red-l); background:#fef2f2; }
+/* ── Widget card ── */
+.widget {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  display: flex; flex-direction: column; gap: 10px; min-height: 300px;
+  animation: fadeUp .22s var(--ease-out) both;
+  transition: box-shadow .2s, border-color .2s;
+}
+.widget:hover { box-shadow: var(--shadow); border-color: var(--green-ll); }
+.widget-head { display:flex; justify-content:space-between; align-items:flex-start; gap:8px; padding-bottom:10px; border-bottom:1px solid var(--border); }
+.widget-title { font-size:.88rem; font-weight:700; color:var(--ink); letter-spacing:-.01em; line-height:1.3; }
+.btn-remove { background:none; border:none; color:var(--ink4); font-size:1.1rem; line-height:1; cursor:pointer; padding:2px 4px; border-radius:4px; flex-shrink:0; transition:.12s; }
+.btn-remove:hover { color:var(--red-l); background:#fef2f2; }
 
-    /* Agg badges */
-    .agg-badge { display:inline-flex; align-items:center; gap:4px; font-size:.62rem; font-weight:700; font-family:'DM Mono',monospace; text-transform:uppercase; letter-spacing:.04em; padding:2px 7px; border-radius:4px; margin-top:3px; }
-    .agg-badge::before { content:''; width:5px; height:5px; border-radius:50%; background:currentColor; opacity:.7; }
-    .badge-sum  { background: var(--green-xll); color: var(--green-d); }
-    .badge-wavg { background: var(--teal-ll);   color: var(--teal); }
-    .badge-avg  { background: #f3e8ff;           color: #7c3aed; }
+/* Agg badges */
+.agg-badge { display:inline-flex; align-items:center; gap:4px; font-size:.62rem; font-weight:700; font-family:'DM Mono',monospace; text-transform:uppercase; letter-spacing:.04em; padding:2px 7px; border-radius:4px; margin-top:3px; }
+.agg-badge::before { content:''; width:5px; height:5px; border-radius:50%; background:currentColor; opacity:.7; }
+.badge-sum  { background: var(--green-xll); color: var(--green-d); }
+.badge-wavg { background: var(--teal-ll);   color: var(--teal); }
+.badge-avg  { background: #f3e8ff;           color: #7c3aed; }
 
-    /* Metric card */
-    .metric-big { font-size:2.8rem; font-weight:700; letter-spacing:-.04em; text-align:center; padding:18px 0 6px; line-height:1; }
-    .metric-sub-sm { text-align:center; font-size:.7rem; font-family:'DM Mono',monospace; color:var(--ink3); padding-bottom:10px; }
+/* Metric card */
+.metric-big { font-size:2.8rem; font-weight:700; letter-spacing:-.04em; text-align:center; padding:18px 0 6px; line-height:1; }
+.metric-sub-sm { text-align:center; font-size:.7rem; font-family:'DM Mono',monospace; color:var(--ink3); padding-bottom:10px; }
 
-    /* Chart wrap inside widget */
-    .widget-chart-wrap { position:relative; flex:1; min-height:200px; width:100%; }
+/* Chart wrap inside widget */
+.widget-chart-wrap { position:relative; flex:1; min-height:200px; width:100%; }
 
-    /* Empty state */
-    .empty-state-page { text-align:center; padding:72px 24px; color:var(--ink3); }
-    .empty-icon { font-size:2.8rem; margin-bottom:14px; opacity:.35; }
-    .empty-state-page h3 { font-size:1.05rem; color:var(--ink2); font-weight:700; margin-bottom:8px; }
-    .empty-state-page p  { font-size:.84rem; line-height:1.7; max-width:400px; margin:0 auto; }
+/* Empty state */
+.empty-state-page { text-align:center; padding:72px 24px; color:var(--ink3); }
+.empty-icon { font-size:2.8rem; margin-bottom:14px; opacity:.35; }
+.empty-state-page h3 { font-size:1.05rem; color:var(--ink2); font-weight:700; margin-bottom:8px; }
+.empty-state-page p  { font-size:.84rem; line-height:1.7; max-width:400px; margin:0 auto; }
 
-    /* Skeleton */
-    .skeleton-group { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:14px; margin-bottom:24px; }
-    .skeleton-hdr   { height:44px; border-radius:calc(var(--radius) - 2px) calc(var(--radius) - 2px) 0 0; margin:-14px -14px 16px; }
-    .skeleton-cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:16px; }
-    .skeleton-card  { height:300px; border-radius:var(--radius-sm); }
-    @keyframes shimmer{0%{background-position:-600px 0}100%{background-position:600px 0}}
-    .skel { border-radius:var(--radius); background:linear-gradient(90deg,#e6ece9 25%,#eff4f1 50%,#e6ece9 75%); background-size:600px 100%; animation:shimmer 1.4s infinite linear; }
+/* Skeleton */
+.skeleton-group { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:14px; margin-bottom:24px; }
+.skeleton-hdr   { height:44px; border-radius:calc(var(--radius) - 2px) calc(var(--radius) - 2px) 0 0; margin:-14px -14px 16px; }
+.skeleton-cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:16px; }
+.skeleton-card  { height:300px; border-radius:var(--radius-sm); }
+@keyframes shimmer{0%{background-position:-600px 0}100%{background-position:600px 0}}
+.skel { border-radius:var(--radius); background:linear-gradient(90deg,#e6ece9 25%,#eff4f1 50%,#e6ece9 75%); background-size:600px 100%; animation:shimmer 1.4s infinite linear; }
+```
+
   </style>
 </head>
 <body>
 
 <!-- Nav -->
+
 <!-- ══ COMMAND CENTER HEADER ══════════════════════════════════════════════ -->
+
 <header class="cmd-header">
   <div class="cmd-left">
     <a href="dds-announcements.html">
@@ -150,29 +156,48 @@
     <nav class="cmd-nav">
     <a class="cmd-tab" href="dds-announcements.html">Announcements</a>
     <a class="cmd-tab" href="dds-dashboard.html">Dashboard</a>
-    <a class="cmd-tab active" href="staff-meeting-dashboard.html">Personal Dashboard</a>
+    <a class="cmd-tab active" href="staff-meeting-dashboard.html">Staff Meeting</a>
     <a class="cmd-tab" href="play-call.html">Play Call</a>
-  
+    <a class="cmd-tab" href="needs-action.html">Needs Action</a>
     </nav>
   </div>
   <div class="cmd-right">
-    <button class="btn-cmd btn-cmd-na" onclick="NovusCore.showNeedsAction()" title="Needs Action">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-      Needs Action
-    </button>
-    <button class="btn-cmd btn-cmd-ghost" onclick="NovusCore.showRules()" title="Rules of Engagement" style="gap:5px;">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-      Rules
-    </button>
-    <button class="btn-cmd btn-cmd-cv" onclick="NovusCore.showCoreValues()" title="Core Values">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-      Core Values
-    </button>
-    <button class="btn-cmd btn-cmd-ghost" onclick="NovusCore.logout()">Logout</button>
+    <!-- ··· More menu -->
+    <div class="cmd-more-wrap" id="more-wrap">
+      <button class="btn-cmd-icon" id="btn-more" onclick="toggleMore(event)" title="More options">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg>
+      </button>
+      <div class="more-dropdown hidden" id="more-dropdown">
+        <div class="sd-group-label">Quick Access</div>
+        <button class="sd-item" onclick="NovusCore.showNeedsAction();closeMore()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          Needs Action
+        </button>
+        <button class="sd-item" onclick="NovusCore.showRules();closeMore()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          Rules of Engagement
+        </button>
+        <button class="sd-item" onclick="NovusCore.showCoreValues();closeMore()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Core Values
+        </button>
+        <button class="sd-item" onclick="NovusCore.showHelp();closeMore()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          Help & FAQ
+        </button>
+        <div class="sd-divider"></div>
+        <div class="sd-group-label">Session</div>
+        <button class="sd-item sd-item-danger" onclick="NovusCore.logout()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Logout
+        </button>
+      </div>
+    </div>
   </div>
 </header>
 
 <!-- Status bar -->
+
 <div class="sp-bar" id="sp-bar">
   <div class="sp-bar-left"><div class="sp-spinner" id="sp-spinner"></div><span id="sp-msg">Ready</span></div>
   <span style="font-size:.68rem;opacity:.85;font-family:'DM Mono',monospace;" id="sp-time"></span>
@@ -240,6 +265,7 @@
   </div>
 
   <!-- Widget output -->
+
   <div id="output"></div>
 </div>
 
@@ -496,5 +522,6 @@ window.__libsCallback=async()=>{
 };
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{if(window.__libs.chartjs&&window.__libs.xlsx)window.__libsCallback();});
 </script>
+
 </body>
 </html>
