@@ -296,7 +296,7 @@ input{font-family:'Inter',sans-serif;color:var(--ink);}
     <nav class="cmd-nav">
       <a class="cmd-tab" href="dds-announcements.html">Announcements</a>
       <a class="cmd-tab" href="dds-dashboard.html">Dashboard</a>
-      <a class="cmd-tab active" href="staff-meeting-dashboard.html">Charts</a>
+      <a class="cmd-tab active" href="staff-meeting-dashboard.html">Personal Dashboard</a>
       <a class="cmd-tab" href="play-call.html">Play Call</a>
     </nav>
   </div>
@@ -402,7 +402,7 @@ input{font-family:'Inter',sans-serif;color:var(--ink);}
      ════════════════════════════════════════════════════════ -->
 <script>
 // ─────────────────────────────────────────────────────────
-//  CONSTANTS  (unchanged)
+//  CONSTANTS
 // ─────────────────────────────────────────────────────────
 const STORAGE_KEY='novus_dash_v4', LAYOUTS_KEY='novus_dash_layouts_v4';
 const DEPT_CAT_COL={'Production':'Line','Inventory Control':'City','Warehouse':'City','SAP PSA Tracking':'PSA Bin','In | Out':'Item'};
@@ -412,7 +412,6 @@ const AVG_KW=['oee','rate','efficiency','attainment','completion','accuracy','yi
 const WEIGHT_COLS=['Planned Production Time','Scheduled Time','Runtime Hours','Available Time','Shift Hours','Hours'];
 const PALETTE=['#059669','#3b82f6','#b45309','#ef4444','#7c3aed','#0d9488','#db2777','#0ea5e9','#f59e0b','#84cc16','#6366f1','#ec4899'];
 
-// Chart types for the toolbar (curated 5 as requested)
 const GHOST_CHART_TYPES=[
   {key:'line',  label:'Line',    icon:`<svg viewBox="0 0 22 14"><polyline points="1,11 5,6 9,8 14,3 21,5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`},
   {key:'bar',   label:'Bar',     icon:`<svg viewBox="0 0 22 14"><rect x="1" y="5" width="4" height="8" rx="1" fill="currentColor"/><rect x="7" y="2" width="4" height="11" rx="1" fill="currentColor"/><rect x="13" y="6" width="4" height="7" rx="1" fill="currentColor"/><rect x="19" y="4" width="2" height="9" rx="1" fill="currentColor"/></svg>`},
@@ -427,10 +426,7 @@ const GHOST_CHART_TYPES=[
 let deptData={}, groups=[], charts={}, widgetMeta={}, drillCSVData='', uid=1;
 let output, draftsEl;
 
-// Ghost card store: id → ghost object
 const ghostCards={};
-
-// Popover state
 const popState={ghostId:null, axis:null, step:'dept', dept:'', query:''};
 
 // ─────────────────────────────────────────────────────────
@@ -472,7 +468,6 @@ function addGhostCard(){
 function renderGhostCards(){
   const ids=Object.keys(ghostCards);
   draftsEl.style.display=ids.length?'':'none';
-  // Build DOM for each, preserving existing elements where possible
   ids.forEach(id=>{
     if(!document.getElementById('gc-'+id)){
       const el=buildGhostCardEl(ghostCards[id]);
@@ -481,7 +476,6 @@ function renderGhostCards(){
       refreshGhostCardUI(id);
     }
   });
-  // Remove stale cards
   [...draftsEl.children].forEach(el=>{
     const id=el.dataset.gid;
     if(id&&!ghostCards[id]) el.remove();
@@ -512,7 +506,6 @@ function ghostCardHTML(g){
   return `
     <div class="ghost-canvas-area">
       <canvas id="gcanvas-${g.id}"></canvas>
-      <!-- Axis zones -->
       <div class="ghost-zones">
         <button class="ghost-zone ghost-zone-y${hasY?' hidden':''}" id="gzy-${g.id}" onclick="openYPopover(event,'${g.id}')">
           <span class="gz-icon">📊</span>
@@ -527,7 +520,6 @@ function ghostCardHTML(g){
           <span class="gz-hint">Click to choose</span>
         </button>
       </div>
-      <!-- Badges (shown when configured) -->
       <div class="ghost-badges">
         <button class="ghost-badge ghost-badge-y${hasY?' visible':''}" id="gbgy-${g.id}" onclick="openYPopover(event,'${g.id}')">
           📊 ${hasY?`<strong>${esc(g.metric)}</strong> <span style="opacity:.6">· ${esc(g.dept)}</span>`:''}
@@ -539,7 +531,6 @@ function ghostCardHTML(g){
         </button>
       </div>
     </div>
-    <!-- Toolbar -->
     <div class="ghost-toolbar">
       <div class="ghost-ct-btns">${ctBtns}</div>
       <div class="ghost-ct-sep"></div>
@@ -558,7 +549,6 @@ function ghostCardHTML(g){
 function refreshGhostCardUI(id){
   const g=ghostCards[id]; if(!g) return;
   const el=document.getElementById('gc-'+id); if(!el) return;
-  // Re-render inner HTML (chart canvas will be re-created by updateGhostChart)
   el.innerHTML=ghostCardHTML(g);
 }
 
@@ -628,7 +618,6 @@ function updateGhostChart(id){
 function setGhostChartType(id,ct){
   const g=ghostCards[id]; if(!g) return;
   g.chartType=ct;
-  // Update button states without full re-render
   document.querySelectorAll(`#gc-${id} .ghost-ct-btn`).forEach((b,i)=>{
     b.classList.toggle('active',GHOST_CHART_TYPES[i].key===ct);
   });
@@ -818,6 +807,14 @@ function renderPopX(){
 
 // ─────────────────────────────────────────────────────────
 //  POPOVER — EVENTS
+//
+//  FIX: capture ghostId into a local `gid` variable BEFORE
+//  calling closePopover(), which sets popState.ghostId = null.
+//  Previously, refreshGhostCardUI(popState.ghostId) and
+//  updateGhostChart(popState.ghostId) were called after
+//  closePopover(), so they always received null and silently
+//  did nothing — leaving the ghost card stuck in its empty
+//  placeholder state after every selection.
 // ─────────────────────────────────────────────────────────
 document.getElementById('pop-list').addEventListener('click',e=>{
   const item=e.target.closest('.pop-item'); if(!item) return;
@@ -830,25 +827,25 @@ document.getElementById('pop-list').addEventListener('click',e=>{
 
   } else if(action==='metric'){
     const g=ghostCards[popState.ghostId]; if(!g) return;
+    const gid=popState.ghostId; // ← capture BEFORE closePopover() nulls popState.ghostId
     g.dept=popState.dept; g.metric=item.dataset.val;
-    // Smart default: if x is still unset, default to date/month + line
     if(!g.xMode) g.xMode='date';
     if(g.xMode==='date'&&g.chartType!=='bar'&&g.chartType!=='area') g.chartType='line';
     closePopover();
-    refreshGhostCardUI(popState.ghostId);
-    updateGhostChart(popState.ghostId);
+    refreshGhostCardUI(gid);  // ← uses captured id, not null
+    updateGhostChart(gid);    // ← uses captured id, not null
 
   } else if(action==='x'){
     const g=ghostCards[popState.ghostId]; if(!g) return;
+    const gid=popState.ghostId; // ← capture BEFORE closePopover() nulls popState.ghostId
     g.xMode=item.dataset.mode;
     g.xGroupBy=item.dataset.groupby||'month';
     g.xCatFld=item.dataset.catfld||'';
-    // Smart default chart type
     if(g.xMode==='date'&&g.chartType==='pie') g.chartType='line';
     if(g.xMode==='category'&&g.chartType==='line') g.chartType='bar';
     closePopover();
-    refreshGhostCardUI(popState.ghostId);
-    updateGhostChart(popState.ghostId);
+    refreshGhostCardUI(gid);  // ← uses captured id, not null
+    updateGhostChart(gid);    // ← uses captured id, not null
   }
 });
 
@@ -914,7 +911,6 @@ function applyPreset(preset,btn){
   let s=null,e=todayUTC;
   switch(preset){case '7d':s=new Date(todayUTC-6*86400000);break;case 'mtd':s=new Date(Date.UTC(now.getFullYear(),now.getMonth(),1));break;case '30d':s=new Date(todayUTC-29*86400000);break;case 'ytd':s=new Date(Date.UTC(now.getFullYear(),0,1));break;default:s=null;e=null;}
   setDateInputs(s,e);updateRangeDisplay(preset,s,e);render();
-  // Also update live ghost charts
   Object.keys(ghostCards).forEach(id=>updateGhostChart(id));
 }
 function setDateInputs(s,e){document.getElementById('gf-cs').value=s?s.toISOString().slice(0,10):'';document.getElementById('gf-ce').value=e?e.toISOString().slice(0,10):'';}
@@ -922,7 +918,7 @@ function onCustomDate(){updateRangeDisplay('custom',document.getElementById('gf-
 function updateRangeDisplay(preset,s,e){const el=document.getElementById('gf-range');if(preset==='all'||(!s&&!e)){el.textContent='';return;}const fmt=d=>d?d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'—';el.textContent=`${fmt(s)} → ${fmt(e)}`;}
 
 // ─────────────────────────────────────────────────────────
-//  DATA LOADING  (unchanged)
+//  DATA LOADING
 // ─────────────────────────────────────────────────────────
 function excelToUTC(v){if(v==null||v==='')return null;if(typeof v==='number'){const d=new Date((v-(v>59?25569:25568))*86400000);return isNaN(d)?null:d;}const s=String(v).trim();let m;if((m=s.match(/^(\d{4})-(\d{2})-(\d{2})/)))return new Date(Date.UTC(+m[1],+m[2]-1,+m[3]));if((m=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/)))return new Date(Date.UTC(+m[3],+m[1]-1,+m[2]));return null;}
 const p2=n=>String(n).padStart(2,'0');
@@ -957,7 +953,7 @@ async function fetchFromSharePoint(){
 }
 
 // ─────────────────────────────────────────────────────────
-//  FILTERING + AGGREGATION  (unchanged from v4)
+//  FILTERING + AGGREGATION
 // ─────────────────────────────────────────────────────────
 function filterRows(rows){const sv=document.getElementById('gf-cs').value,ev=document.getElementById('gf-ce').value;const s0=sv?Date.UTC(+sv.slice(0,4),+sv.slice(5,7)-1,+sv.slice(8,10)):null;const e0=ev?Date.UTC(+ev.slice(0,4),+ev.slice(5,7)-1,+ev.slice(8,10)):null;return rows.filter(r=>{if(!r._jsDate)return false;const t=r._jsDate.getTime();if(s0!==null&&t<s0)return false;if(e0!==null&&t>e0)return false;return true;});}
 function aggType(m){if(m==='Fill Rate %')return'fill-rate';if(AVG_METRICS.has(m))return'weighted-avg';if(AVG_KW.some(k=>m.toLowerCase().includes(k)))return'weighted-avg';return'sum';}
@@ -1102,7 +1098,7 @@ function downloadBlob(content,filename,mime){const blob=new Blob([content],{type
 function sanitize(s){return String(s||'chart').replace(/[^a-z0-9_\-]/gi,'_').replace(/_+/g,'_').slice(0,80);}
 
 // ─────────────────────────────────────────────────────────
-//  HELPERS  (unchanged)
+//  HELPERS
 // ─────────────────────────────────────────────────────────
 function calcTrend(data){if(!data||data.length<2)return null;const curr=data[data.length-1],prev=data[data.length-2];if(prev===0)return null;const pct=((curr-prev)/Math.abs(prev))*100;return{pct,up:pct>0.05,flat:Math.abs(pct)<=0.05};}
 function trendPillHtml(trend){if(!trend)return'';if(trend.flat)return`<span class="trend-pill trend-flat">≈ flat</span>`;return`<span class="trend-pill ${trend.up?'trend-up':'trend-down'}">${trend.up?'▲':'▼'} ${Math.abs(trend.pct).toFixed(1)}%</span>`;}
@@ -1138,5 +1134,6 @@ window.__libsCallback=async()=>{
 if(document.readyState==='loading')
   document.addEventListener('DOMContentLoaded',()=>{if(window.__libs.chartjs&&window.__libs.xlsx)window.__libsCallback();});
 </script>
+<script src="novus-interactions.js" defer></script>
 </body>
 </html>
