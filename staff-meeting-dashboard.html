@@ -74,10 +74,10 @@ input{font-family:'Inter',sans-serif;color:var(--ink);}
   box-shadow:0 2px 12px rgba(5,150,105,.08);
 }
 .ghost-canvas-area{position:relative;height:300px;overflow:hidden;background:linear-gradient(160deg,#f0fdf4,#f9fafb);}
-.ghost-canvas-area canvas{position:absolute;inset:0;width:100%;height:100%;}
+.ghost-canvas-area canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;}
 
 /* Axis zones (shown when not configured) */
-.ghost-zones{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:16px;padding:24px;pointer-events:none;}
+.ghost-zones{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:16px;padding:24px;pointer-events:none;z-index:2;}
 .ghost-zone{
   flex:1;max-width:260px;min-height:140px;
   border-radius:14px;border:2px dashed;
@@ -99,7 +99,7 @@ input{font-family:'Inter',sans-serif;color:var(--ink);}
 .ghost-zone.hidden{display:none;}
 
 /* Badges shown after axis is configured */
-.ghost-badges{position:absolute;top:10px;left:10px;right:10px;display:flex;justify-content:space-between;pointer-events:none;}
+.ghost-badges{position:absolute;top:10px;left:10px;right:10px;display:flex;justify-content:space-between;pointer-events:none;z-index:3;}
 .ghost-badge{
   display:inline-flex;align-items:center;gap:6px;
   padding:5px 12px;border-radius:20px;
@@ -296,7 +296,7 @@ input{font-family:'Inter',sans-serif;color:var(--ink);}
     <nav class="cmd-nav">
       <a class="cmd-tab" href="dds-announcements.html">Announcements</a>
       <a class="cmd-tab" href="dds-dashboard.html">Dashboard</a>
-      <a class="cmd-tab active" href="staff-meeting-dashboard.html">Personal Dashboard</a>
+      <a class="cmd-tab active" href="staff-meeting-dashboard.html">Charts</a>
       <a class="cmd-tab" href="play-call.html">Play Call</a>
     </nav>
   </div>
